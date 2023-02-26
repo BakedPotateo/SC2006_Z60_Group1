@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "289945088905",
+    "project_id": "sc2006-aa865",
+    "storage_bucket": "sc2006-aa865.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289945088905:android:b15617591799654cbd6758",
+        "android_client_info": {
+          "package_name": "com.example.myexpoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289945088905-quq2btuuqspj9p6ss8kc500baaln4ura.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGAAA-5sj_Yse4L_Z8N6nvpXXJhTIK7o8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289945088905-quq2btuuqspj9p6ss8kc500baaln4ura.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
