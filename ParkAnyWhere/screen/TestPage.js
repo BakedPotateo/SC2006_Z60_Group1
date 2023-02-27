@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification  } from '../firebaseConfig';
+import TestPage from './TestPage2.js';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,6 +15,11 @@ const LoginScreen = () => {
         // Signed in successfully
         const user = userCredential.user;
         console.log('User logged in successfully', user);
+        //navigation.navigate('TestPage2'); // This is for navigating after logging in
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'TestPage2' }],
+        }); //this is for navigating to the page after logging in
       })
       .catch((error) => {
         console.log('Error logging in', error);
@@ -19,7 +27,6 @@ const LoginScreen = () => {
   };
   
   
-
   const handleRegister = () => {
     createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
