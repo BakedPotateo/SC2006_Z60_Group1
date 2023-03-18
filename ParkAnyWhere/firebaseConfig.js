@@ -3,14 +3,15 @@ import { getAuth , signInWithEmailAndPassword , createUserWithEmailAndPassword ,
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD2amLeLBuuQN0RbYQ2BzmSyJ8oZY8_iPg",
-    authDomain: "sc2006-aa865.firebaseapp.com",
-    projectId: "sc2006-aa865",
-    storageBucket: "sc2006-aa865.appspot.com",
-    messagingSenderId: "289945088905",
-    appId: "1:289945088905:web:0be1027b446e3079bd6758",
-    measurementId: "G-4P776TLCE0"
-  };
+  apiKey: "AIzaSyC2G3gaQdkFGRz4-6xefA7UmfGOYtfPdK8",
+  authDomain: "project-3065124884762541683.firebaseapp.com",
+  databaseURL: "https://project-3065124884762541683-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "project-3065124884762541683",
+  storageBucket: "project-3065124884762541683.appspot.com",
+  messagingSenderId: "180866816226",
+  appId: "1:180866816226:web:c80b10ea55f30cc9a6e6bb",
+  measurementId: "G-M5K46RKEJK"
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
