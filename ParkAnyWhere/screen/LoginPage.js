@@ -40,7 +40,14 @@ const LoginScreen = ({ navigation }) => {
         .catch((error) => {
             console.log('Error registering user', error);
         });
-  };
+    };
+
+    const navToRegister = () => {
+        navigation.reset({
+            index: 1,
+            routes: [{ name: 'SignUpScreen' }],
+        })
+    }
 
     return (
         <View style={styles.container}>
@@ -79,7 +86,7 @@ const LoginScreen = ({ navigation }) => {
             <View style={styles.createStack}>
                 <Text style={styles.create}>Create</Text>
                 <TouchableOpacity
-                    onPress={handleRegister}
+                    onPress={navToRegister}
                     style={styles.button3}
                 ></TouchableOpacity>
             </View>

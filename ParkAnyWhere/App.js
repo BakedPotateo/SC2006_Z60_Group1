@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 //testing
 import LoginScreen from './screen/LoginPage.js';
 import MapScreen from './screen/TestPage2.js';
+import SignUpScreen from './screen/SignUpScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="LoginPage" component={LoginScreen} />
         <Stack.Screen name="TestPage2" component={MapScreen} />
+        <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
