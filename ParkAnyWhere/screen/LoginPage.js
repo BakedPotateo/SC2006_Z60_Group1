@@ -21,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
         //navigation.navigate('TestPage2'); // This is for navigating after logging in
         navigation.reset({
           index: 0,
-          routes: [{ name: 'TestPage2' }],
+          routes: [{ name: 'MainPage' }],
         }); //this is for navigating to the page after logging in
       })
       .catch((error) => {
@@ -44,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
 
     const navToRegister = () => {
         navigation.reset({
-            index: 1,
+            index: 0,
             routes: [{ name: 'SignUpScreen' }],
         })
     }
