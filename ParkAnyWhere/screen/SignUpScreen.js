@@ -9,7 +9,7 @@ import {
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
-import LoginButton from "./components/LoginButton";
+import LoginButton from "./Components/LoginButton";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const SignUpScreen = ({ navigation }) => {

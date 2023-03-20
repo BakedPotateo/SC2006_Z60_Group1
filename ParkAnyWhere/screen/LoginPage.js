@@ -4,7 +4,7 @@ import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPas
 import TestPage from './TestPage2.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginButton from "./components/LoginButton";
+import LoginButton from "./Components/LoginButton";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 
@@ -21,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
         //navigation.navigate('TestPage2'); // This is for navigating after logging in
         navigation.reset({
           index: 0,
-          routes: [{ name: 'MainPage' }],
+          routes: [{ name: 'TestPage2' }],
         }); //this is for navigating to the page after logging in
       })
       .catch((error) => {
@@ -55,7 +55,7 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.loremIpsum}>Sign in to your account</Text>
             <Text style={styles.signIn}>Sign In</Text>
             <Text style={styles.loremIpsum2}>Don&#39;t have an account?</Text>
-            <View style={styles.rect}></View>
+            <View style={styles.rect}></View> 
             <View style={styles.loginButtonStack}>
                 <LoginButton style={styles.loginButton}></LoginButton>
                 <TouchableOpacity
