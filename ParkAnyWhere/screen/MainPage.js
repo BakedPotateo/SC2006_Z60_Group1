@@ -29,6 +29,9 @@ const MainPage = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+        <Pressable>
+        <EntypoIcon name="chevron-with-circle-right" style={styles.signInButton}/>
+        </Pressable>
         <View style={styles.iconStackRow}>
             <View style={styles.iconStack}>
                 <EntypoIcon name="home" style={styles.icon}></EntypoIcon>
@@ -78,6 +81,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#E6E6E6",
         opacity: 0
     },
+    signInButton: {
+        color: "#FFFFFF",
+        fontSize: 40,
+        height: 44,
+        width: 40,
+        marginLeft: 7
+      },
     iconStack: {
         width: 40,
         height: 44
