@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ImageBackground } from 'react-native';
 import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification  } from '../firebaseConfig';
 import TestPage from './TestPage2.js';
 import { NavigationContainer } from '@react-navigation/native';
@@ -51,11 +51,17 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <ImageBackground
+                source={require("../assets/pink-bg.jpg")}
+                style={styles.backgroundImage}
+            >
             <Text style={styles.hello}>Hello</Text>
             <Text style={styles.loremIpsum}>Sign in to your account</Text>
             <Text style={styles.signIn}>Sign In</Text>
-            <Text style={styles.loremIpsum2}>Don&#39;t have an account?</Text>
-            <View style={styles.rect}></View> 
+
+            <Text style={styles.loremIpsum2}>Don't have an account?</Text>
+            <View style={styles.rect}></View>
+
             <View style={styles.loginButtonStack}>
                 <LoginButton style={styles.loginButton}></LoginButton>
                 <TouchableOpacity
@@ -63,7 +69,8 @@ const LoginScreen = ({ navigation }) => {
                     style={styles.button}
                 ></TouchableOpacity>
             </View>
-            <TextInput placeholder="Username"
+            <TextInput 
+                placeholder="Username"
                 value={email}
                 onChangeText={setEmail}
                 style={styles.placeholder}></TextInput>
@@ -90,6 +97,7 @@ const LoginScreen = ({ navigation }) => {
                     style={styles.button3}
                 ></TouchableOpacity>
             </View>
+            </ImageBackground>
         </View>
     );
 }
@@ -98,6 +106,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "rgba(255,255,255,1)"
+    },
+    backgroundImage: {
+        flex: 1,
+        width: null,
+        resizeMode: 'stretch'
     },
     hello: {
         top: 98,
