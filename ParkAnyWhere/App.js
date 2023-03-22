@@ -37,5 +37,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-//hello
