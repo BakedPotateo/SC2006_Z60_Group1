@@ -6,6 +6,7 @@ import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as Font from 'expo-font';
 
 //testing
 import LoginScreen from './screen/LoginPage.js';
@@ -15,10 +16,29 @@ import MainPage from './screen/MainPage.js'
 
 const Stack = createStackNavigator();
 
+const customFonts = {
+  'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+  'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf'),
+};
+
+
+
 export default function App() {
+
+  const [fontsLoaded, setFontsLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync(customFonts);
+      setFontsLoaded(true);
+    }
+
+    loadFonts();
+  }, []);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator headerMode="none">
         <Stack.Screen name="LoginPage" component={LoginScreen} />
         <Stack.Screen name="TestPage2" component={MapScreen} />
         <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
