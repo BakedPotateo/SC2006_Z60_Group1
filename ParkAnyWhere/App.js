@@ -8,11 +8,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font';
 
-//testing
+//Screens
 import LoginScreen from './screen/LoginPage.js';
 import MapScreen from './screen/TestPage2.js';
 import SignUpScreen from './screen/SignUpScreen.js';
 import MainPage from './screen/MainPage.js'
+import Header from './screen/Components/Header.js';
 
 const Stack = createStackNavigator();
 
@@ -38,7 +39,8 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode="none">
+      <Stack.Navigator screenOptions={{ headerShown: false}}> 
+        <Stack.Screen name="Header" component={Header} />
         <Stack.Screen name="LoginPage" component={LoginScreen} />
         <Stack.Screen name="TestPage2" component={MapScreen} />
         <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
