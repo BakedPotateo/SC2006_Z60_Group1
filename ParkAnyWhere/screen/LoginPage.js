@@ -21,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
         //navigation.navigate('TestPage2'); // This is for navigating after logging in
         navigation.reset({
           index: 0,
-          routes: [{ name: 'MainPage' }],
+          routes: [{ name: 'TestPage2' }],
         }); //this is for navigating to the page after logging in
       })
       .catch((error) => {
@@ -58,8 +58,10 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.hello}>Hello</Text>
             <Text style={styles.loremIpsum}>Sign in to your account</Text>
             <Text style={styles.signIn}>Sign In</Text>
+
             <Text style={styles.loremIpsum2}>Don't have an account?</Text>
             <View style={styles.rect}></View>
+
             <View style={styles.loginButtonStack}>
                 <LoginButton style={styles.loginButton}></LoginButton>
                 <TouchableOpacity

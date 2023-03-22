@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker , Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import PriceTag from './Views/PriceTag';
+import CarParkInfo from './Views/CarParkInfo';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
 const MapScreen = () => {
@@ -42,6 +43,7 @@ const MapScreen = () => {
 
   const getPriceTag = (carPark) => {
     // Implement a function to fetch or calculate the car park price
+
     return `$${Math.floor(Math.random() * 10)}/hour`;
   };
 
@@ -68,6 +70,9 @@ const MapScreen = () => {
               tracksViewChanges={false}
             >
               <PriceTag price={getPriceTag(carPark)} />
+              <Callout>
+                <CarParkInfo carParkInfo={carPark} />
+              </Callout>
             </Marker>
           ))}
         </MapView>
