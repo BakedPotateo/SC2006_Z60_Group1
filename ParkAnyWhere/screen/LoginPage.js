@@ -4,7 +4,7 @@ import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPas
 import TestPage from './TestPage2.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginButton from "./Components/LoginButton";
+import LoginButton from "./components/LoginButton";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import * as Font from 'expo-font';
@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation }) => {
         //navigation.navigate('TestPage2'); // This is for navigating after logging in
         navigation.reset({
           index: 0,
-          routes: [{ name: 'TestPage2' }],
+          routes: [{ name: 'MainPage' }],
         }); //this is for navigating to the page after logging in
       })
       .catch((error) => {
@@ -47,7 +47,7 @@ const LoginScreen = ({ navigation }) => {
     const navToRegister = () => {
         navigation.reset({
             index: 0,
-            routes: [{ name: 'SignUpScreen' }],
+            routes: [{ name: 'SignUpPage' }],
         })
     }
 

@@ -11,9 +11,9 @@ import * as Font from 'expo-font';
 //Screens
 import LoginScreen from './screen/LoginPage.js';
 import MapScreen from './screen/TestPage2.js';
-import SignUpScreen from './screen/SignUpScreen.js';
+import SignUpScreen from './screen/SignUpPage.js';
 import MainPage from './screen/MainPage.js'
-import Header from './screen/Components/Header.js';
+import Header from './screen/components/Header.js';
 
 const Stack = createStackNavigator();
 
@@ -40,10 +40,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false}}> 
-        <Stack.Screen name="Header" component={Header} />
         <Stack.Screen name="LoginPage" component={LoginScreen} />
+        <Stack.Screen name="SignUpPage" component={SignUpScreen} />
+        <Stack.Screen name="Header" component={Header} />
         <Stack.Screen name="TestPage2" component={MapScreen} />
-        <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
         <Stack.Screen name="MainPage" component={MainPage}/>
       </Stack.Navigator>
     </NavigationContainer>

@@ -12,7 +12,7 @@ import EntypoIcon from "react-native-vector-icons/Entypo";
 import LoginButton from "./components/LoginButton";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
-const SignUpScreen = ({ navigation }) => {
+const SignUpPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.createAccount}>Create Account</Text>
@@ -227,4 +227,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SignUpScreen;
+export default SignUpPage;
