@@ -1,76 +1,88 @@
 import React, { Component } from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity
+    StyleSheet,
+    View,
+    StatusBar,
+    Image,
+    ImageBackground,
+    Text,
+    TextInput,
+    TouchableOpacity
 } from "react-native";
+import * as Font from 'expo-font';
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
-import LoginButton from "./components/LoginButton";
-import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const SignUpPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.createAccount}>Create Account</Text>
-      <View style={styles.icon1Row}>
-        <FontAwesomeIcon name="lock" style={styles.icon1}></FontAwesomeIcon>
-        <TextInput
-          placeholder="Password"
-          secureTextEntry={true}
-          style={styles.password1}
-        ></TextInput>
-      </View>
-      <View style={styles.icon2Row}>
-        <FeatherIcon name="user" style={styles.icon2}></FeatherIcon>
-        <TextInput
-          placeholder="Username"
-          style={styles.placeholder1}
-        ></TextInput>
-      </View>
-      <View style={styles.icon3Row}>
-        <EntypoIcon name="mail" style={styles.icon3}></EntypoIcon>
-        <TextInput placeholder="E-mail" style={styles.eMail}></TextInput>
-      </View>
-      <View style={styles.icon4Row}>
-        <EntypoIcon name="mobile" style={styles.icon4}></EntypoIcon>
-        <TextInput
-          placeholder="Mobile"
-          keyboardType="numeric"
-          dataDetector="phoneNumber"
-          style={styles.mobile}
-        ></TextInput>
-      </View>
-      <View style={styles.create4Row}>
-        <Text style={styles.create4}>Create</Text>
-        <View style={styles.loginButtonStack}>
-          <LoginButton style={styles.loginButton}></LoginButton>
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate("LoginScreen")}
-            style={styles.button}
-          ></TouchableOpacity>
+      <StatusBar hidden />
+      <ImageBackground
+        source={require("../assets/SignUpPageBG.jpg")}
+        resizeMode="stretch"
+        style={styles.image}
+        imageStyle={styles.image_imageStyle}
+      >
+        <View style={styles.createAccountColumn}>
+          <Text style={styles.createAccount}>Create Account</Text>
+          <View style={styles.icon8Row}>
+            <FeatherIcon name="user" style={styles.icon8}></FeatherIcon>
+            <TextInput
+              placeholder="Username"
+              style={styles.placeholder2}
+            ></TextInput>
+          </View>
+          <View style={styles.icon9Row}>
+            <FontAwesomeIcon name="lock" style={styles.icon9}></FontAwesomeIcon>
+            <TextInput
+              placeholder="Password"
+              secureTextEntry={true}
+              style={styles.password1}
+            ></TextInput>
+          </View>
+          <View style={styles.icon4Row}>
+            <EntypoIcon name="mobile" style={styles.icon4}></EntypoIcon>
+            <TextInput
+              placeholder="Mobile"
+              style={styles.textInput}
+            ></TextInput>
+          </View>
+          <View style={styles.create5Row}>
+            <Text style={styles.create5}>Create</Text>
+            <View style={styles.loginButtonColumn}>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("LoginScreen")}
+                style={styles.button}>
+                <FeatherIcon name="arrow-right" style={styles.arrow}/>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
-      <Text style={styles.loremIpsum}>
-        Or create account using social media
-      </Text>
-      <View style={styles.icon5Row}>
-        <EntypoIcon
-          name="facebook-with-circle"
-          style={styles.icon5}
-        ></EntypoIcon>
-        <MaterialCommunityIconsIcon
-          name="twitter-circle"
-          style={styles.icon6}
-        ></MaterialCommunityIconsIcon>
-        <MaterialCommunityIconsIcon
-          name="google"
-          style={styles.icon7}
-        ></MaterialCommunityIconsIcon>
-      </View>
+        <View style={styles.createAccountColumnFiller}></View>
+        <View style={styles.group2}>
+          <View style={styles.endWrapperFiller}></View>
+          <View style={styles.loremIpsumColumn}>
+            <Text style={styles.loremIpsum}>
+              Or create account using social media
+            </Text>
+            <View style={styles.group}>
+              <EntypoIcon
+                name="facebook-with-circle"
+                style={styles.icon5}
+              ></EntypoIcon>
+              <EntypoIcon
+                name="twitter-with-circle"
+                style={styles.icon6}
+              ></EntypoIcon>
+              <EntypoIcon
+                name="google--with-circle"
+                style={styles.icon7}
+              ></EntypoIcon>
+            </View>
+          </View>
+        </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -79,152 +91,152 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-    createAccount: {
-        fontFamily: "arial-regular",
-        color: "#121212",
-        fontSize: 25,
-        marginTop: '30%',
-        alignItems: 'center',
-        textAlign: 'center'
+    image: {
+        flex: 1
     },
-    icon1: {
+    image_imageStyle: {},
+    createAccount: {
+        fontFamily: "roboto-700",
+        color: "#121212",
+        fontSize: 30,
+        textAlign: "center"
+    },
+    icon8: {
         color: "rgba(128,128,128,1)",
         fontSize: 20,
-        marginTop: 7
+        height: 20,
+        width: 20,
+        marginTop: '5%'
+    },
+    placeholder2: {
+        fontFamily: "roboto-regular",
+        color: "#121212",
+        height: 34,
+        width: 280,
+        marginLeft: 12,
+        marginTop: '3%'
+    },
+    icon8Row: {
+        height: 34,
+        flexDirection: "row",
+        marginTop: 9,
+        marginLeft: 48
+    },
+    icon9: {
+        color: "rgba(128,128,128,1)",
+        fontSize: 20,
+        height: 20,
+        width: 13,
+        marginTop: 8
     },
     password1: {
         fontFamily: "roboto-regular",
         color: "#121212",
         height: 34,
-        width: 152,
-        marginLeft: 17
+        width: 280,
+        marginLeft: 15
     },
-    icon1Row: {
+    icon9Row: {
         height: 34,
         flexDirection: "row",
-        marginTop: 77,
-        marginLeft: 90,
-        marginRight: 88
-    },
-    icon2: {
-        color: "rgba(128,128,128,1)",
-        fontSize: 20,
-        marginTop: 7
-    },
-    placeholder1: {
-        fontFamily: "roboto-regular",
-        color: "#121212",
-        height: 34,
-        width: 152,
-        marginLeft: 12
-    },
-    icon2Row: {
-        height: 34,
-        flexDirection: "row",
-        marginTop: -101,
-        marginLeft: 88,
-        marginRight: 88
-    },
-    icon3: {
-        color: "rgba(128,128,128,1)",
-        fontSize: 20,
-        marginTop: 11
-    },
-    eMail: {
-        fontFamily: "roboto-regular",
-        color: "#121212",
-        height: 45,
-        width: 121,
-        marginLeft: 14
-    },
-    icon3Row: {
-        height: 45,
-        flexDirection: "row",
-        marginTop: 93,
-        marginLeft: 88,
-        marginRight: 117
+        marginTop: 16,
+        marginLeft: 52
     },
     icon4: {
         color: "rgba(128,128,128,1)",
         fontSize: 20,
+        width: 20,
+        height: 23,
         marginTop: 8
     },
-    mobile: {
+    textInput: {
         fontFamily: "roboto-regular",
         color: "#121212",
+        height: 39,
+        width: 280,
         marginLeft: 12
     },
     icon4Row: {
         height: 39,
         flexDirection: "row",
-        marginTop: 22,
-        marginLeft: 88,
-        marginRight: 140
+        marginTop: 21,
+        marginLeft: 48
     },
-    create4: {
+    create5: {
         fontFamily: "roboto-regular",
         color: "#121212",
         height: 39,
         width: 67,
         fontSize: 20
     },
-    loginButton: {
-        position: "absolute",
-        left: 0,
-        top: 0,
-        width: 42,
-        height: 26
-    },
     button: {
-        top: 0,
-        left: 0,
         width: 42,
         height: 26,
-        position: "absolute",
-        backgroundColor: "#E6E6E6",
-        opacity: 0
+        borderRadius: 30,
+        paddingVertical: 5,
+        paddingHorizontal: 20,
+        backgroundColor: "#ff6666",
+        marginTop: '9%',
+        marginLeft: '3%'
     },
-    loginButtonStack: {
-        width: 42,
-        height: 26
+    arrow: {
+        color: '#FFFFFF',
+        fontSize: 20,
     },
-    create4Row: {
-        height: 39,
+    create5Row: {
         flexDirection: "row",
-        marginTop: 51,
-        marginLeft: 205,
-        marginRight: 46
+        marginTop: '35%',
+        marginLeft: '55%'
+    },
+    createAccountColumn: {
+        marginTop: '45%'
+    },
+    createAccountColumnFiller: {
+        flex: 1
+    },
+    group2: {
+        width: 360,
+        height: 78,
+        marginBottom: '13%',
+        alignSelf: "center"
+    },
+    endWrapperFiller: {
+        flex: 1
     },
     loremIpsum: {
         fontFamily: "roboto-regular",
         color: "#121212",
-        fontSize: 12,
-        marginTop: 53,
-        marginLeft: 84
+        fontSize: 13,
+        textAlign: "center",
+        marginBottom: '4%'
+    },
+    group: {
+        height: 44,
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+        width: 220,
+        alignSelf: "center"
     },
     icon5: {
         color: "rgba(18,30,215,1)",
-        fontSize: 40
+        fontSize: 40,
+        width: 40,
+        height: 44
     },
     icon6: {
         color: "rgba(50,178,230,1)",
         fontSize: 40,
-        marginLeft: 22,
-        marginTop: 1
+        width: 40,
+        height: 43
     },
     icon7: {
         color: "rgba(207,43,30,1)",
         fontSize: 40,
-        marginLeft: 22,
-        marginTop: 1
+        width: 40,
+        height: 43
     },
-    icon5Row: {
-        height: 44,
-        flexDirection: "row",
-        marginTop: 22,
-        marginLeft: 100,
-        marginRight: 96
-    }
+    loremIpsumColumn: {}
 });
 
 export default SignUpPage;
