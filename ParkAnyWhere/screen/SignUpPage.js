@@ -7,14 +7,37 @@ import {
     ImageBackground,
     Text,
     TextInput,
+    KeyboardAwareScrollView,
     TouchableOpacity
 } from "react-native";
 import * as Font from 'expo-font';
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const SignUpPage = ({ navigation }) => {
+
+    const handleRegister = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // User has been created successfully
+                console.log('User registered successfully', userCredential);
+                sendEmailVerification(auth.currentUser);
+            })
+            .catch((error) => {
+                console.log('Error registering user', error);
+            });
+    };
+
+    const navToLogin = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'LoginPage' }],
+        })
+    }
+
   return (
     <View style={styles.container}>
       <StatusBar hidden />
@@ -52,7 +75,7 @@ const SignUpPage = ({ navigation }) => {
             <Text style={styles.create5}>Create</Text>
             <View style={styles.loginButtonColumn}>
               <TouchableOpacity
-                onPress={() => props.navigation.navigate("LoginScreen")}
+                onPress={navToLogin}
                 style={styles.button}>
                 <FeatherIcon name="arrow-right" style={styles.arrow}/>
               </TouchableOpacity>
@@ -92,7 +115,10 @@ const styles = StyleSheet.create({
         flex: 1
     },
     image: {
-        flex: 1
+        flex: 1,
+        resizeMode: 'stretch',
+        justifyContent: 'center',
+        width: '100%',
     },
     image_imageStyle: {},
     createAccount: {
@@ -106,61 +132,96 @@ const styles = StyleSheet.create({
         fontSize: 20,
         height: 20,
         width: 20,
-        marginTop: '5%'
+        marginLeft: 20
     },
     placeholder2: {
         fontFamily: "roboto-regular",
         color: "#121212",
         height: 34,
         width: 280,
-        marginLeft: 12,
-        marginTop: '3%'
+        marginLeft: '4%',
     },
     icon8Row: {
         height: 34,
         flexDirection: "row",
-        marginTop: 9,
-        marginLeft: 48
+        marginTop: '8%',
+        width: '80%',
+        height: '10%',
+        position: 'relative',
+        overflow: 'hidden',
+        elevation: 5,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        borderRadius: 30,
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        alignSelf: 'center'
     },
     icon9: {
         color: "rgba(128,128,128,1)",
         fontSize: 20,
         height: 20,
-        width: 13,
-        marginTop: 8
+        width: 20,
+        marginLeft: 20
     },
     password1: {
         fontFamily: "roboto-regular",
         color: "#121212",
         height: 34,
         width: 280,
-        marginLeft: 15
+        marginLeft: '3%'
     },
     icon9Row: {
         height: 34,
         flexDirection: "row",
-        marginTop: 16,
-        marginLeft: 52
+        marginTop: '5%',
+        width: '80%',
+        height: '10%',
+        position: 'relative',
+        overflow: 'hidden',
+        elevation: 5,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        borderRadius: 30,
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        alignSelf: 'center'
     },
     icon4: {
         color: "rgba(128,128,128,1)",
         fontSize: 20,
         width: 20,
-        height: 23,
-        marginTop: 8
+        height: 20,
+        marginLeft: 20
     },
     textInput: {
         fontFamily: "roboto-regular",
         color: "#121212",
-        height: 39,
+        height: 34,
         width: 280,
-        marginLeft: 12
+        marginLeft: '4%'
     },
     icon4Row: {
-        height: 39,
+        height: 34,
         flexDirection: "row",
-        marginTop: 21,
-        marginLeft: 48
+        marginTop: '5%',
+        width: '80%',
+        height: '10%',
+        position: 'relative',
+        overflow: 'hidden',
+        elevation: 5,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        borderRadius: 30,
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        alignSelf: 'center'
     },
     create5: {
         fontFamily: "roboto-regular",
@@ -170,13 +231,11 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     button: {
-        width: 42,
-        height: 26,
         borderRadius: 30,
         paddingVertical: 5,
         paddingHorizontal: 20,
         backgroundColor: "#ff6666",
-        marginTop: '9%',
+        marginTop: '2%',
         marginLeft: '3%'
     },
     arrow: {
@@ -185,7 +244,7 @@ const styles = StyleSheet.create({
     },
     create5Row: {
         flexDirection: "row",
-        marginTop: '35%',
+        marginTop: '39%',
         marginLeft: '55%'
     },
     createAccountColumn: {
