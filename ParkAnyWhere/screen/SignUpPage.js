@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         height: 20,
         width: 20,
-        marginLeft: 20
+        marginLeft: 23
     },
     password1: {
         fontFamily: "roboto-regular",
