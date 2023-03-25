@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState , useEffect} from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View , ImageBackground  , KeyboardAvoidingView , ScrollView} from 'react-native';
 import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification  } from '../firebaseConfig';
 import TestPage from './TestPage2.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginButton from "./Components/LoginButton";
+import LoginButton from "./components/LoginButton";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import * as Font from 'expo-font';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -21,7 +23,7 @@ const LoginScreen = ({ navigation }) => {
         //navigation.navigate('TestPage2'); // This is for navigating after logging in
         navigation.reset({
           index: 0,
-          routes: [{ name: 'TestPage2' }],
+          routes: [{ name: 'MainPage' }],
         }); //this is for navigating to the page after logging in
       })
       .catch((error) => {
@@ -45,195 +47,208 @@ const LoginScreen = ({ navigation }) => {
     const navToRegister = () => {
         navigation.reset({
             index: 0,
-            routes: [{ name: 'SignUpScreen' }],
+            routes: [{ name: 'SignUpPage' }],
         })
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.hello}>Hello</Text>
-            <Text style={styles.loremIpsum}>Sign in to your account</Text>
-            <Text style={styles.signIn}>Sign In</Text>
-            <Text style={styles.loremIpsum2}>Don&#39;t have an account?</Text>
-            <View style={styles.rect}></View> 
-            <View style={styles.loginButtonStack}>
-                <LoginButton style={styles.loginButton}></LoginButton>
-                <TouchableOpacity
-                    onPress={handleLogin}
-                    style={styles.button}
-                ></TouchableOpacity>
+      
+          <ImageBackground source={require('../assets/LoginBG.png')} style={styles.image} resizeMode="stretch">
+          <KeyboardAwareScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false}>
+            <View style={styles.header}>
+              <Text style={styles.hello}>Hello</Text>
             </View>
-            <TextInput placeholder="Username"
-                value={email}
-                onChangeText={setEmail}
-                style={styles.placeholder}></TextInput>
-            <TextInput
-                placeholder="Password"
-                secureTextEntry={true}
-                value={password}
-                onChangeText={setPassword}
-                style={styles.password}
-            ></TextInput>
-            <FeatherIcon name="user" style={styles.icon}></FeatherIcon>
-            <FontAwesomeIcon name="lock" style={styles.icon2}></FontAwesomeIcon>
-            <View style={styles.loremIpsum7Stack}>
+            <View style={styles.content}>
+              <Text style={styles.loremIpsum}>Sign in to your account</Text>
+              <View style={styles.inputContainer}>
+                <FeatherIcon name="user" style={styles.icon} />
+                <TextInput
+                  placeholder="Username"
+                  value={email}
+                  onChangeText={setEmail}
+                  style={styles.placeholder}
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <FontAwesomeIcon name="lock" style={styles.icon2} />
+                <TextInput
+                  placeholder="Password"
+                  secureTextEntry={true}
+                  value={password}
+                  onChangeText={setPassword}
+                  style={styles.password}
+                />
+              </View>
+              <View style={styles.forgotPasswordContainer}>
+                <TouchableOpacity onPress={() => {}}>
                 <Text style={styles.loremIpsum7}>Forgot your password?</Text>
-                <TouchableOpacity
-                    onPress={() => props.navigation.navigate("LoginScreen")}
-                    style={styles.button2}
-                ></TouchableOpacity>
-            </View>
-            <View style={styles.createStack}>
+                </TouchableOpacity>
+                <View style={styles.signInContainer}>
+                  <Text style={styles.signInText}>Sign In</Text>
+                  <TouchableOpacity onPress={handleLogin} style={styles.signInButton}>
+                    <FeatherIcon name="arrow-right" style={styles.icon3} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.createAccountContainer}>
+              <Text style={styles.loremIpsum2}>Don&#39;t have an account?</Text>
+              <TouchableOpacity onPress={navToRegister} style={styles.button3}>
                 <Text style={styles.create}>Create</Text>
-                <TouchableOpacity
-                    onPress={navToRegister}
-                    style={styles.button3}
-                ></TouchableOpacity>
+              </TouchableOpacity>
             </View>
-        </View>
-    );
-}
+            </View>
+            </KeyboardAwareScrollView>
+          </ImageBackground>
+      
+      );
+    };
 
 const styles = StyleSheet.create({
     container: {
+      flex: 1,
+    },
+    image: {
+      flex: 1,
+      resizeMode: 'stretch',
+      justifyContent: 'center',
+      width: '100%',
+    },
+    header: {
+      marginTop: 100,
+    },
+    backgroundImage: {
         flex: 1,
-        backgroundColor: "rgba(255,255,255,1)"
+        width: null,
+        resizeMode: 'stretch'
     },
     hello: {
-        top: 98,
-        position: "absolute",
-        fontFamily: "arial-regular",
-        color: "#121212",
-        fontSize: 65,
-        left: 106
+      fontFamily: "roboto-bold",
+      color: "#121212",
+      fontSize: 55,
+      textAlign: 'center',
+    },
+    content: {
+      flex: 1,
+      alignItems: 'center',
     },
     loremIpsum: {
-        top: 193,
-        left: 109,
-        position: "absolute",
-        fontFamily: "roboto-regular",
-        color: "#121212"
+        marginTop: '3%',
+        marginBottom: '10%',
+      fontFamily: "roboto-regular",
+      color: "#121212",
     },
-    signIn: {
-        top: 493,
-        left: 196,
-        position: "absolute",
-        fontFamily: "roboto-regular",
-        color: "#121212",
-        height: 38,
-        width: 63,
-        fontSize: 20
-    },
-    loremIpsum2: {
-        top: 626,
-        left: 92,
-        position: "absolute",
-        fontFamily: "roboto-regular",
-        color: "#121212"
-    },
-    rect: {},
-    loginButton: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        height: 26,
-        width: 42
-    },
-    button: {
-        top: 0,
-        left: 0,
-        width: 42,
-        height: 26,
-        position: "absolute",
-        backgroundColor: "#E6E6E6",
-        opacity: 0
-    },
-    loginButtonStack: {
-        top: 493,
-        left: 266,
-        width: 42,
-        height: 26,
-        position: "absolute"
-    },
-    placeholder: {
-        top: 276,
-        left: 124,
-        position: "absolute",
-        fontFamily: "roboto-regular",
-        color: "#121212",
-        height: 34,
-        width: 152
-    },
-    password: {
-        top: 325,
-        left: 124,
-        position: "absolute",
-        fontFamily: "roboto-regular",
-        color: "#121212",
-        height: 34,
-        width: 152
+    inputContainer: {
+      borderRadius: 30,
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: '#FFFFFF',
+      marginBottom: 30,
+      width: '80%',
+      height: '10%',
+      position: 'relative',
+      overflow: 'hidden',
+      elevation: 5,
+      shadowColor: 'black',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
     },
     icon: {
-        top: 283,
-        left: 92,
-        position: "absolute",
-        color: "rgba(128,128,128,1)",
-        fontSize: 20
+      color: "rgba(128,128,128,1)",
+      fontSize: 20,
+      marginRight: 20,
+      marginLeft: 20,
     },
     icon2: {
-        top: 332,
-        left: 95,
-        position: "absolute",
         color: "rgba(128,128,128,1)",
-        fontSize: 20
+        fontSize: 20,
+        marginRight: 20,
+        marginLeft: 24,
+      },
+    placeholder: {
+      flex: 1,
+      fontFamily: "roboto-regular",
+      color: "#121212",
+      height: 34,
     },
-    loremIpsum7: {
-        top: 0,
-        left: 0,
-        position: "absolute",
-        fontFamily: "roboto-regular",
-        color: "rgba(155,155,155,1)",
-        fontSize: 10
+    password: {
+      flex: 1,
+      fontFamily: "roboto-regular",
+      color: "#121212",
+      height: 34,
     },
-    button2: {
-        top: 0,
-        left: 0,
-        width: 104,
-        height: 13,
-        position: "absolute",
-        backgroundColor: "#E6E6E6",
-        opacity: 0
+    button: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#E6E6E6',
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 5,
+      marginBottom: 10,
     },
-    loremIpsum7Stack: {
-        top: 370,
-        left: 204,
-        width: 104,
-        height: 13,
-        position: "absolute"
+    signIn: {
+      fontFamily: "roboto-regular",
+      color: "#121212",
+      fontSize: 20,
     },
-    create: {
-        top: 0,
-        left: 0,
-        position: "absolute",
-        fontFamily: "roboto-700",
-        color: "#121212",
-        textDecorationLine: "underline"
+    forgotPasswordContainer: {
+        alignSelf: 'flex-end',
+      },
+      loremIpsum7: {
+        fontFamily: 'roboto-regular',
+        color: 'rgba(155,155,155,1)',
+        fontSize: 10,
+        marginBottom: 20,
+        marginRight: 10,
+      },
+    footer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 15,
+    },
+    loremIpsum2: {
+      fontFamily: "roboto-regular",
+      color: "#121212",
+      marginRight: 10,
     },
     button3: {
-        top: 0,
-        left: 0,
-        width: 42,
-        height: 15,
-        position: "absolute",
-        backgroundColor: "#E6E6E6",
-        opacity: 0
+      alignItems: 'center',
+      justifyContent: 'center',
     },
-    createStack: {
-        top: 626,
-        left: 245,
-        width: 42,
-        height: 17,
-        position: "absolute"
-    }
-});
+    create: {
+      fontFamily: "roboto-regular",
+      color: "#121212",
+      textDecorationLine: "underline",
+      marginLeft: -5
+    },
+    signInContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 20,
+    },
+    signInButton: {
+      paddingVertical: 5,
+      paddingHorizontal: 20,
+      backgroundColor: '#ff6666',
+      borderRadius: 30,
+      marginRight: 10,
+      marginLeft: 10,
+    },
+    icon3: {
+      color: '#FFFFFF',
+      fontSize: 20,
+    },
+    signInText: {
+      fontFamily: "roboto-bold",
+      color: "#121212",
+      fontSize: 18,
+    },
+    createAccountContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: '30%',
+    },
+  });
+  
 export default LoginScreen;
