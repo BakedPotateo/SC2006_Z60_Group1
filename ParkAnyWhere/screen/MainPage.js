@@ -33,18 +33,6 @@ const MainPage = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-<<<<<<< HEAD
-        <Pressable>
-        <EntypoIcon name="chevron-with-circle-right" style={styles.signInButton}/>
-        </Pressable>
-        <View style={styles.iconStackRow}>
-            <View style={styles.iconStack}>
-                <EntypoIcon name="home" style={styles.icon}></EntypoIcon>
-                <TouchableOpacity
-                    onPress={navToMainPage}
-                    style={styles.button}
-                ></TouchableOpacity>
-=======
 
             <View style={styles.topView}>
                 <ImageBackground source={require("../assets/pink-bg.jpg")} style={styles.backgroundImage}>
@@ -83,7 +71,6 @@ const MainPage = ({ navigation }) => {
                     </Pressable>
                 </View>
                 </ImageBackground>
->>>>>>> 7c8b7958c817b5cc37c737426ae274d1bf2ec099
             </View>
 
             <MapView
