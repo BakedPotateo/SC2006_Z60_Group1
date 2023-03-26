@@ -4,7 +4,7 @@ import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPas
 import TestPage from './TestPage2.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginButton from "./components/LoginButton";
+import LoginButton from "./Components/LoginButton";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import * as Font from 'expo-font';
