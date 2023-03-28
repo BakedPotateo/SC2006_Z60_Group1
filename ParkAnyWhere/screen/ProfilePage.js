@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         height: 170,
         width: 150,
         paddingTop: 10,
-        backgroundColor: "#fff5e4",
+        backgroundColor: "#fdeeeb",
         justifyContent: 'flex-start',
         borderRadius: 30
     },
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     },
     leftCardValues: {
         color: "#fe6244",
-        fontSize: 30,
+        fontSize: 24,
         fontWeight: "bold"
     },
     rightCard: {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
         height: 170,
         width: 150,
         paddingTop: 10,
-        backgroundColor: "#fe6244",
+        backgroundColor: "#ef4433",
         justifyContent: 'flex-start',
         borderRadius: 30,
     },
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     },
     rightCardValues: {
         color: "#fff",
-        fontSize: 30,
+        fontSize: 24,
         fontWeight: "bold",
     },
     BookingHistoryView: {
