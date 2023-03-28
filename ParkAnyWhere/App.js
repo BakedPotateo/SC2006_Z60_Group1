@@ -13,7 +13,7 @@ import LoginScreen from './screen/LoginPage.js';
 import MapScreen from './screen/TestPage2.js';
 import SignUpScreen from './screen/SignUpPage.js';
 import MainPage from './screen/MainPage.js'
-import Header from './screen/Components/Header.js';
+import Header from './screen/components/Header.js';
 
 const Stack = createStackNavigator();
 
