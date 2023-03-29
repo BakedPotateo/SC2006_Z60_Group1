@@ -7,6 +7,7 @@ import IoniconsIcon from "react-native-vector-icons/Ionicons"
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+
 const MainPage = ({ navigation }) => {
     const [destination, setDestination] = useState('');
 
@@ -33,43 +34,9 @@ const MainPage = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-
-            <View style={styles.topView}>
+            <View style={styles.headerWrapper}>
                 <ImageBackground source={require("../assets/pink-bg.jpg")} style={styles.backgroundImage}>
-                <Image
-                    source={require("../assets/car-inverted.png")}
-                    resizeMode="contain"
-                    style={styles.image}
-                />
-                <Text style={styles.parkAnywhere}>ParkAnywhere</Text>
-
-                <View style={styles.inputWrap}>
-                    <EntypoIcon name="magnifying-glass" style={styles.magnifyingGlassIcon}></EntypoIcon>
-                    <TextInput
-                        placeholder="Where are you going?"
-                        value={destination}
-                        onChangeText={setDestination}
-                        style={styles.destinationInput}
-                    ></TextInput>
-                </View>
                 
-                <View style={styles.inputWrap}>
-                    <TextInput
-                        placeholder="Date"
-                        value={destination} // Todo: change to date selector
-                        onChangeText={setDestination}
-                        style={styles.dateInput}
-                    ></TextInput>
-                    <TextInput
-                        placeholder="00:00"
-                        value={destination} // Todo: change to time selector
-                        onChangeText={setDestination}
-                        style={styles.timeInput}
-                    ></TextInput>
-                    <Pressable>
-                        <EntypoIcon name="chevron-with-circle-right" style={styles.chevronButton}></EntypoIcon>
-                    </Pressable>
-                </View>
                 </ImageBackground>
             </View>
 
@@ -118,6 +85,9 @@ const MainPage = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    }, 
+    headerWrapper: {
+       
     },
     parkAnywhere: {
         fontFamily: "roboto-regular",

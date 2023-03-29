@@ -13,7 +13,7 @@ import LoginScreen from './screen/LoginPage.js';
 import MapScreen from './screen/TestPage2.js';
 import SignUpScreen from './screen/SignUpPage.js';
 import MainPage from './screen/MainPage.js'
-import Header from './screen/components/Header.js';
+import Header from './screen/Components/Header.js';
 
 const Stack = createStackNavigator();
 
@@ -39,12 +39,12 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false}}> 
-        <Stack.Screen name="LoginPage" component={LoginScreen} />
-        <Stack.Screen name="SignUpPage" component={SignUpScreen} />
-        <Stack.Screen name="Header" component={Header} />
+      <Stack.Navigator > 
+        <Stack.Screen name="LoginPage" component={LoginScreen} options={{ headerShown: false}} />
+        <Stack.Screen name="SignUpPage" component={SignUpScreen} options={{ headerShown: false}}/>
+        
         <Stack.Screen name="TestPage2" component={MapScreen} />
-        <Stack.Screen name="MainPage" component={MainPage}/>
+        <Stack.Screen name="MainPage" component={MainPage} options={{header: () => <Header title="ParkAnyWhere" />,}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
