@@ -1,8 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import TestPage from './screen/TestPage.js';
-import MainScreen from './screen/MainScreen.js';
-import TestPage from './screen/TestPage.js';
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,7 +8,6 @@ import * as Font from 'expo-font';
 
 //Screens
 import LoginScreen from './screen/LoginPage.js';
-import MapScreen from './screen/TestPage2.js';
 import SignUpScreen from './screen/SignUpPage.js';
 import MapScreen from './screen/MainPage.js'
 import Header from './screen/Components/Header.js';
