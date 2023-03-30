@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View , ImageBackground  , KeyboardAvoidingView , ScrollView} from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View , ImageBackground  , KeyboardAvoidingView , ScrollView , Button} from 'react-native';
 import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification  } from '../firebaseConfig';
 import TestPage from './MainPage.js';
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,6 +8,11 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import * as Font from 'expo-font';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import EntypoIcon from "react-native-vector-icons/Entypo";
+import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
+import * as Random from 'expo-random';
+
+
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -30,26 +35,45 @@ const LoginScreen = ({ navigation }) => {
         console.log('Error logging in', error);
       });
   };
-  
-  
-  const handleRegister = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-        // User has been created successfully
-            console.log('User registered successfully', userCredential);
-            sendEmailVerification(auth.currentUser);
-        })
-        .catch((error) => {
-            console.log('Error registering user', error);
-        });
-    };
 
-    const navToRegister = () => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'SignUpPage' }],
-        })
+  const [randomValue] = useState(() => {
+    return Random.getRandomBytes(10).toString('hex');
+  });
+
+  const discovery = {
+    authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth',
+    tokenEndpoint: 'https://oauth2.googleapis.com/token',
+    revocationEndpoint: 'https://oauth2.googleapis.com/revoke',
+  };
+
+  const navToRegister = () => {
+      navigation.reset({
+          index: 0,
+          routes: [{ name: 'SignUpPage' }],
+      })
+  }
+
+  const [request, response, promptAsync] = useAuthRequest(
+    {
+      clientId: 'YOUR_CLIENT_ID',
+      redirectUri: makeRedirectUri({
+        native: 'com.googleusercontent.apps.YOUR_CLIENT_ID:/oauth2redirect',
+        useProxy: Platform.select({ web: false, default: true }),
+      }),
+      responseType: ResponseType.Token,
+      scopes: ['openid', 'profile', 'email'],
+      usePKCE: false,
+      state: randomValue,
+    },
+    discovery
+  );
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { access_token } = response.params;
+      console.log('Google login success:', access_token);
     }
+  }, [response]);
 
     return (
       
@@ -95,6 +119,14 @@ const LoginScreen = ({ navigation }) => {
               <TouchableOpacity onPress={navToRegister} style={styles.button3}>
                 <Text style={styles.create}>Create</Text>
               </TouchableOpacity>
+              
+              <Button
+                title="Sign in with Google"
+                onPress={() => {
+                  promptAsync();
+                }}
+                disabled={!request}
+              />
             </View>
             </View>
             </KeyboardAwareScrollView>
@@ -249,6 +281,12 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       marginTop: '30%',
     },
+    icon7: {
+      color: "rgba(207,43,30,1)",
+      fontSize: 40,
+      width: 40,
+      height: 43
+  },
   });
   
 export default LoginScreen;
