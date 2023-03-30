@@ -1,7 +1,7 @@
 import React, { useState , useEffect} from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View , ImageBackground  , KeyboardAvoidingView , ScrollView} from 'react-native';
 import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification  } from '../firebaseConfig';
-import TestPage from './TestPage2.js';
+import TestPage from './MainPage.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import FeatherIcon from "react-native-vector-icons/Feather";
@@ -22,27 +22,15 @@ const LoginScreen = ({ navigation }) => {
         //navigation.navigate('TestPage2'); // This is for navigating after logging in
         navigation.reset({
           index: 0,
-          routes: [{ name: 'MainPage' }],
-        }); //this is for navigating to the page after logging in
+          routes: [{ name: 'MapScreen' }], 
+          navigation:{navigation}
+        }); 
       })
       .catch((error) => {
         console.log('Error logging in', error);
       });
   };
   
-  
-  const handleRegister = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-        // User has been created successfully
-            console.log('User registered successfully', userCredential);
-            sendEmailVerification(auth.currentUser);
-        })
-        .catch((error) => {
-            console.log('Error registering user', error);
-        });
-    };
-
     const navToRegister = () => {
         navigation.reset({
             index: 0,

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, Component } from "react";
 import {
     StyleSheet,
     View,
@@ -16,8 +16,12 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { auth, firestore, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification } from '../firebaseConfig';
 
 const SignUpPage = ({ navigation }) => {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleRegister = () => {
         createUserWithEmailAndPassword(auth, email, password)
@@ -53,6 +57,8 @@ const SignUpPage = ({ navigation }) => {
             <FeatherIcon name="user" style={styles.icon8}></FeatherIcon>
             <TextInput
               placeholder="Username"
+              value={email}
+              onChangeText={setEmail}
               style={styles.placeholder2}
             ></TextInput>
           </View>
@@ -61,6 +67,8 @@ const SignUpPage = ({ navigation }) => {
             <TextInput
               placeholder="Password"
               secureTextEntry={true}
+              value={password}
+              onChangeText={setPassword}
               style={styles.password1}
             ></TextInput>
           </View>
@@ -75,7 +83,7 @@ const SignUpPage = ({ navigation }) => {
             <Text style={styles.create5}>Create</Text>
             <View style={styles.loginButtonColumn}>
               <TouchableOpacity
-                onPress={navToLogin}
+                onPress={handleRegister}
                 style={styles.button}>
                 <FeatherIcon name="arrow-right" style={styles.arrow}/>
               </TouchableOpacity>

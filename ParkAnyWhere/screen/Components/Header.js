@@ -16,7 +16,7 @@ class Header extends React.Component {
       time: new Date(),
       showDatePicker: false,
       showTimePicker: false,
-      toggleButtonText: 'List',
+      toggleButtonText: 'Map',
       checked: false,
       selectedValue: '',
     };
@@ -24,8 +24,13 @@ class Header extends React.Component {
 
   handleToggle = () => {
     this.setState((prevState) => ({
-      toggleButtonText: prevState.toggleButtonText === 'List' ? 'Map' : 'List',
+      toggleButtonText: prevState.toggleButtonText === 'Map' ? 'List' : 'Map',
     }));
+    if(this.state.toggleButtonText == 'Map'){
+      this.props.navigation.navigate('LoginPage'); //change this after getting new file
+    } else {
+      this.props.navigation.navigate('MapScreen');
+    }
   };
 
   handleCheckboxChange = () => {
