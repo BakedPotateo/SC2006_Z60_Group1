@@ -31,19 +31,6 @@ const LoginScreen = ({ navigation }) => {
       });
   };
   
-  
-  const handleRegister = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-        // User has been created successfully
-            console.log('User registered successfully', userCredential);
-            sendEmailVerification(auth.currentUser);
-        })
-        .catch((error) => {
-            console.log('Error registering user', error);
-        });
-    };
-
     const navToRegister = () => {
         navigation.reset({
             index: 0,
