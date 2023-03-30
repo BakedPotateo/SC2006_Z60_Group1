@@ -10,9 +10,8 @@ import * as Font from 'expo-font';
 
 //Screens
 import LoginScreen from './screen/LoginPage.js';
-import MapScreen from './screen/TestPage2.js';
 import SignUpScreen from './screen/SignUpPage.js';
-import MainPage from './screen/MainPage.js'
+import MapScreen from './screen/MainPage.js'
 import Header from './screen/Components/Header.js';
 
 const Stack = createStackNavigator();
@@ -43,8 +42,7 @@ export default function App() {
         <Stack.Screen name="LoginPage" component={LoginScreen} options={{ headerShown: false}} />
         <Stack.Screen name="SignUpPage" component={SignUpScreen} options={{ headerShown: false}}/>
         
-        <Stack.Screen name="TestPage2" component={MapScreen} />
-        <Stack.Screen name="MainPage" component={MainPage} options={{header: () => <Header title="ParkAnyWhere" />,}}/>
+        <Stack.Screen name="MapScreen" component={MapScreen}  options={{header: () => <Header title="ParkAnyWhere" />,}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
