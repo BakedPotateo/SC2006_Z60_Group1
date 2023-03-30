@@ -8,7 +8,8 @@ import {
     Text,
     TextInput,
     KeyboardAwareScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    Button
 } from "react-native";
 import * as Font from 'expo-font';
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
@@ -16,7 +17,8 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { auth, firestore, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification } from '../firebaseConfig';
+import Modal from "react-native-modal";
+import { auth, firestore, createUserWithEmailAndPassword, sendEmailVerification } from '../firebaseConfig';
 
 const SignUpPage = ({ navigation }) => {
 
@@ -29,9 +31,14 @@ const SignUpPage = ({ navigation }) => {
                 // User has been created successfully
                 console.log('User registered successfully', userCredential);
                 sendEmailVerification(auth.currentUser);
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'LoginPage' }],
+                })
             })
             .catch((error) => {
                 console.log('Error registering user', error);
+                setModalVisible(!isModalVisible);
             });
     };
 
@@ -40,7 +47,13 @@ const SignUpPage = ({ navigation }) => {
             index: 0,
             routes: [{ name: 'LoginPage' }],
         })
-    }
+    };
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
 
   return (
     <View style={styles.container}>
@@ -85,6 +98,12 @@ const SignUpPage = ({ navigation }) => {
               <TouchableOpacity
                 onPress={handleRegister}
                 style={styles.button}>
+                <Modal isVisible={isModalVisible}>
+                    <View style={styles.hide}>
+                       <Text style={styles.text1}>Error with account creation</Text>
+                       <Button title="Back to Log In page" onPress={toggleModal, navToLogin} />
+                     </View>
+                 </Modal>
                 <FeatherIcon name="arrow-right" style={styles.arrow}/>
               </TouchableOpacity>
             </View>
@@ -121,6 +140,10 @@ const SignUpPage = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    text1: {
+        textAlign: 'center',
+        marginBottom: '20%'
     },
     image: {
         flex: 1,
