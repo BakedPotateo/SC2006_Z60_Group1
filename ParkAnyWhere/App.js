@@ -15,6 +15,7 @@ import SignUpScreen from './screen/SignUpScreen.js';
 import MainPage from './screen/MainPage.js'
 import Header from './screen/Components/Header.js';
 import ProfilePage from './screen/ProfilePage.js';
+import ReviewPage from './screen/ReviewPage.js';
 
 
 const Stack = createStackNavigator();
@@ -40,16 +41,15 @@ export default function App() {
   }, []);
 
   return (
-    // <NavigationContainer>
-    //   <Stack.Navigator screenOptions={{ headerShown: false}}> 
-    //     <Stack.Screen name="Header" component={Header} />
-    //     <Stack.Screen name="LoginPage" component={LoginScreen} />
-    //     <Stack.Screen name="TestPage2" component={MapScreen} />
-    //     <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
-    //     <Stack.Screen name="MainPage" component={MainPage}/>
-    //   </Stack.Navigator>
-    // </NavigationContainer>
-    <ProfilePage/>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false}}> 
+        <Stack.Screen name="Header" component={Header} />
+        <Stack.Screen name="LoginPage" component={LoginScreen} />
+        <Stack.Screen name="TestPage2" component={MapScreen} />
+        <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
+        <Stack.Screen name="MainPage" component={MainPage}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
