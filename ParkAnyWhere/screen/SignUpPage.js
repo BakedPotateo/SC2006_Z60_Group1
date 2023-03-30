@@ -101,7 +101,7 @@ const SignUpPage = ({ navigation }) => {
                 <Modal isVisible={isModalVisible}>
                     <View style={styles.hide}>
                        <Text style={styles.text1}>Error with account creation</Text>
-                       <Button title="Back to Log In page" onPress={toggleModal, navToLogin} />
+                       <Button title="Back to Log In page" onPress={navToLogin} />
                      </View>
                  </Modal>
                 <FeatherIcon name="arrow-right" style={styles.arrow}/>
