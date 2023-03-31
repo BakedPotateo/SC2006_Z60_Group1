@@ -6,6 +6,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
 
 //Screens
 import LoginScreen from './screen/LoginPage.js';
@@ -15,25 +16,18 @@ import Header from './screen/Components/Header.js';
 
 const Stack = createStackNavigator();
 
-const customFonts = {
-  'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
-  'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf'),
-};
-
-
-
 export default function App() {
 
-  const [fontsLoaded, setFontsLoaded] = React.useState(false);
+  const [fontsLoaded] = Font.useFonts({
+    'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+    'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf'),
+  });
 
-  React.useEffect(() => {
-    async function loadFonts() {
-      await Font.loadAsync(customFonts);
-      setFontsLoaded(true);
-    }
-
-    loadFonts();
-  }, []);
+  if (!fontsLoaded) {
+    return (
+      <AppLoading />
+    )
+  }
 
   return (
     <NavigationContainer>
