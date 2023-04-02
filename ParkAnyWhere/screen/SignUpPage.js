@@ -9,7 +9,8 @@ import {
     TextInput,
     KeyboardAwareScrollView,
     TouchableOpacity,
-    Button
+    Button,
+    Dimensions
 } from "react-native";
 import * as Font from 'expo-font';
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
@@ -57,11 +58,11 @@ const SignUpPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar hidden />
+      {/* <StatusBar hidden /> */}
       <ImageBackground
         source={require("../assets/SignUpPageBG.jpg")}
         resizeMode="stretch"
-        style={styles.image}
+        style={styles.backgroundImage}
         imageStyle={styles.image_imageStyle}
       >
         <View style={styles.createAccountColumn}>
@@ -150,6 +151,13 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
         justifyContent: 'center',
         width: '100%',
+    },
+    backgroundImage: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
     },
     image_imageStyle: {},
     createAccount: {
@@ -279,7 +287,7 @@ const styles = StyleSheet.create({
         marginLeft: '55%'
     },
     createAccountColumn: {
-        marginTop: '45%'
+        marginTop: '25%'
     },
     createAccountColumnFiller: {
         flex: 1

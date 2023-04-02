@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View , ImageBackground  , KeyboardAvoidingView , ScrollView} from 'react-native';
+import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View , ImageBackground  , KeyboardAvoidingView , ScrollView} from 'react-native';
 import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification  } from '../firebaseConfig';
 import TestPage from './MainPage.js';
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,10 +9,11 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import * as Font from 'expo-font';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+
+
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -40,50 +41,50 @@ const LoginScreen = ({ navigation }) => {
 
     return (
       
-          <ImageBackground source={require('../assets/LoginBG.png')} style={styles.image} resizeMode="stretch">
-          <KeyboardAwareScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false}>
-            <View style={styles.header}>
-              <Text style={styles.hello}>Hello</Text>
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.loremIpsum}>Sign in to your account</Text>
-              <View style={styles.inputContainer}>
-                <FeatherIcon name="user" style={styles.icon} />
-                <TextInput
-                  placeholder="Username"
-                  value={email}
-                  onChangeText={setEmail}
-                  style={styles.placeholder}
-                />
+          <ImageBackground source={require('../assets/LoginBG.png')} style={styles.backgroundImage} resizeMode="stretch">
+            <KeyboardAwareScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false}>
+              <View style={styles.header}>
+                <Text style={styles.hello}>Hello</Text>
               </View>
-              <View style={styles.inputContainer}>
-                <FontAwesomeIcon name="lock" style={styles.icon2} />
-                <TextInput
-                  placeholder="Password"
-                  secureTextEntry={true}
-                  value={password}
-                  onChangeText={setPassword}
-                  style={styles.password}
-                />
-              </View>
-              <View style={styles.forgotPasswordContainer}>
-                <TouchableOpacity onPress={() => {}}>
-                <Text style={styles.loremIpsum7}>Forgot your password?</Text>
-                </TouchableOpacity>
-                <View style={styles.signInContainer}>
-                  <Text style={styles.signInText}>Sign In</Text>
-                  <TouchableOpacity onPress={handleLogin} style={styles.signInButton}>
-                    <FeatherIcon name="arrow-right" style={styles.icon3} />
-                  </TouchableOpacity>
+              <View style={styles.content}>
+                <Text style={styles.loremIpsum}>Sign in to your account</Text>
+                <View style={styles.inputContainer}>
+                  <FeatherIcon name="user" style={styles.icon} />
+                  <TextInput
+                    placeholder="Username"
+                    value={email}
+                    onChangeText={setEmail}
+                    style={styles.placeholder}
+                  />
                 </View>
+                <View style={styles.inputContainer}>
+                  <FontAwesomeIcon name="lock" style={styles.icon2} />
+                  <TextInput
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    value={password}
+                    onChangeText={setPassword}
+                    style={styles.password}
+                  />
+                </View>
+                <View style={styles.forgotPasswordContainer}>
+                  <TouchableOpacity onPress={() => {}}>
+                  <Text style={styles.loremIpsum7}>Forgot your password?</Text>
+                  </TouchableOpacity>
+                  <View style={styles.signInContainer}>
+                    <Text style={styles.signInText}>Sign In</Text>
+                    <TouchableOpacity onPress={handleLogin} style={styles.signInButton}>
+                      <FeatherIcon name="arrow-right" style={styles.icon3} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.createAccountContainer}>
+                <Text style={styles.loremIpsum2}>Don&#39;t have an account?</Text>
+                <TouchableOpacity onPress={navToRegister} style={styles.button3}>
+                  <Text style={styles.create}>Create</Text>
+                </TouchableOpacity>
               </View>
-              <View style={styles.createAccountContainer}>
-              <Text style={styles.loremIpsum2}>Don&#39;t have an account?</Text>
-              <TouchableOpacity onPress={navToRegister} style={styles.button3}>
-                <Text style={styles.create}>Create</Text>
-              </TouchableOpacity>
-            </View>
-            </View>
+              </View>
             </KeyboardAwareScrollView>
           </ImageBackground>
       
@@ -104,9 +105,11 @@ const styles = StyleSheet.create({
       marginTop: 100,
     },
     backgroundImage: {
-        flex: 1,
-        width: null,
-        resizeMode: 'stretch'
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
     },
     hello: {
       fontFamily: "roboto-bold",
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#FFFFFF',
       marginBottom: 30,
       width: '80%',
-      height: '10%',
+      height: 50,
       position: 'relative',
       overflow: 'hidden',
       elevation: 5,
