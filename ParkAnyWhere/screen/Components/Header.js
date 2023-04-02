@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     marginBottom: 20,
     width: '80%',
+    height: 35,
     backgroundColor: '#ED7B7B',
     marginLeft: '10%',
     shadowColor: '#000',

@@ -53,7 +53,7 @@ export default function App() {
   }
 
   return (
-    <><View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="LoginPage" component={LoginScreen} options={{ headerShown: false }} />
@@ -61,7 +61,7 @@ export default function App() {
           <Stack.Screen name="MainPage" component={MainPage} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
-    </View></>
+    </View>
   );
 }
 

@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     leftCardValues: {
-        color: "#fe6244",
+        color: "#ED7B7B",
         fontSize: 24,
         fontWeight: "bold"
     },
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
         height: 170,
         width: 150,
         paddingTop: 10,
-        backgroundColor: "#ef4433",
+        backgroundColor: "#ED7B7B",
         justifyContent: 'flex-start',
         borderRadius: 30,
     },
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     carparkCard: {
+        color: '#fdeeeb',
         flexDirection: "row",
         alignItems: 'center',
     },

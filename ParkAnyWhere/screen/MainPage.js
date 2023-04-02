@@ -4,8 +4,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
 import MapScreen from './MapScreen';
-import ReviewPage from './ReviewPage';
-import FeedbackPage from './FeedbackPage'; // Placeholder for ProfilePage
+import ProfilePage from './ProfilePage';
+import FeedbackPage from './FeedbackPage'; 
 import Header from './Components/Header.js';
 
 //Screen names
@@ -20,8 +20,9 @@ function MainPage() {
     <Tab.Navigator
       initialRouteName={homeName}
       screenOptions={({ route }) => ({
-        "tabBarActiveTintColor": "#ed7b7b",
+        "tabBarActiveTintColor": "#ED7B7B",
         "tabBarInactiveTintColor": "grey",
+        "tabBarHideOnKeyboard": true,
         "tabBarLabelStyle": {
           "paddingBottom": 5,
           "fontSize": 12
@@ -31,8 +32,9 @@ function MainPage() {
         },
         "tabBarStyle": [
           {
-            "display": "flex",
-            "height": 60
+            "position": 'absolute',
+            "height": 60,
+            "bottom": 0
           },
           null
         ],
@@ -59,8 +61,8 @@ function MainPage() {
       >
 
       <Tab.Screen name={homeName} component={MapScreen} options={{ header: () => <Header title="ParkAnyWhere" />, }} />
-      <Tab.Screen name={feedbackName} component={FeedbackPage} />
-      <Tab.Screen name={profileName} component={ReviewPage} />
+      <Tab.Screen name={feedbackName} component={FeedbackPage} options={{headerShown: false}}/>
+      <Tab.Screen name={profileName} component={ProfilePage} options={{headerShown: false}}/>
 
     </Tab.Navigator>
   );
