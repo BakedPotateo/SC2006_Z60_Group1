@@ -42,7 +42,12 @@ const LoginScreen = ({ navigation }) => {
     return (
       
           <ImageBackground source={require('../assets/LoginBG.png')} style={styles.backgroundImage} resizeMode="stretch">
-            <KeyboardAwareScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false}>
+            <KeyboardAwareScrollView 
+              contentContainerStyle={styles.content} 
+              keyboardShouldPersistTaps="handled" 
+              resetScrollToCoords={{ x: 0, y: 0 }} 
+              scrollEnabled={false}
+            >
               <View style={styles.header}>
                 <Text style={styles.hello}>Hello</Text>
               </View>
