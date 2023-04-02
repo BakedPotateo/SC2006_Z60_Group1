@@ -22,7 +22,7 @@ const LoginScreen = ({ navigation }) => {
         //navigation.navigate('TestPage2'); // This is for navigating after logging in
         navigation.reset({
           index: 0,
-          routes: [{ name: 'MapScreen' }], 
+          routes: [{ name: 'MainPage' }], 
           navigation:{navigation}
         }); 
       })

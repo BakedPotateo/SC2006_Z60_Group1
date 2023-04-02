@@ -10,7 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 //Screens
 import LoginScreen from './screen/LoginPage.js';
 import SignUpScreen from './screen/SignUpPage.js';
-import MapScreen from './screen/MainPage.js'
+import MainPage from './screen/MainPage.js'
 import Header from './screen/Components/Header.js';
 
 const Stack = createStackNavigator();
@@ -56,9 +56,9 @@ export default function App() {
     <><View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="LoginPage" component={LoginScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="SignUpPage" component={SignUpScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="MapScreen" component={MapScreen} options={{ header: () => <Header title="ParkAnyWhere" />, }} />
+          {/* <Stack.Screen name="LoginPage" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="SignUpPage" component={SignUpScreen} options={{ headerShown: false }} /> */}
+          <Stack.Screen name="MainPage" component={MainPage} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </View></>

@@ -1,97 +1,65 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker , Callout } from 'react-native-maps';
-import * as Location from 'expo-location';
-import PriceTag from './Views/PriceTag';
-import CarParkInfo from './Views/CarParkInfo';
-const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
+import * as React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const MapScreen = () => {
-  const [region, setRegion] = useState(null);
-  const [marker, setMarker] = useState(null);
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [carParks, setCarParks] = useState([]);
-  const markerRefs = useRef([]);
+// Screens
+import MapScreen from './MapScreen';
+import ReviewPage from './ReviewPage';
+import FeedbackPage from './FeedbackPage'; // Placeholder for ProfilePage
+import Header from './Components/Header.js';
 
-  // Get the user's current location and set it as the initial region
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+//Screen names
+const homeName = "Home";
+const feedbackName = "Feedback";
+const profileName = "Profile";
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location.coords);
-      fetchNearbyCarParks(location.coords);
-    })();
-  }, []);
+const Tab = createBottomTabNavigator();
 
-  const fetchNearbyCarParks = async ({ latitude, longitude }) => {
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1500&type=parking&key=${GOOGLE_MAPS_API_KEY}`;
-
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      setCarParks(data.results);
-    } catch (error) {
-      console.error('Error fetching nearby car parks:', error);
-    }
-  };
-
-  const getPriceTag = (carPark) => {
-    // Implement a function to fetch or calculate the car park price
-
-    return `$${Math.floor(Math.random() * 10)}/hour`;
-  };
-
+function MainPage() {
   return (
-    <View style={styles.container}>
-      {location && (
-        <MapView
-          style={styles.map}
-          provider={PROVIDER_GOOGLE}
-          region={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        >
-          {carParks.map((carPark) => (
-            <Marker
-              key={carPark.place_id}
-              coordinate={{
-                latitude: carPark.geometry.location.lat,
-                longitude: carPark.geometry.location.lng,
-              }}
-              tracksViewChanges={false}
-            >
-              <PriceTag price={getPriceTag(carPark)} />
-              <Callout>
-                <CarParkInfo carParkInfo={carPark} />
-              </Callout>
-            </Marker>
-          ))}
-        </MapView>
-      )}
-    </View>
+    <Tab.Navigator
+      initialRouteName={homeName}
+      screenOptions={({ route }) => ({
+        "tabBarActiveTintColor": "#ed7b7b",
+        "tabBarInactiveTintColor": "grey",
+        "tabBarLabelStyle": {
+          "paddingBottom": 5,
+          "fontSize": 10
+        },
+        "tabBarStyle": [
+          {
+            "display": "flex"
+          },
+          null
+        ],
+
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          let rn = route.name;
+
+          if (rn === homeName) {
+            iconName = focused ? 'home' : 'home-outline';
+
+          } else if (rn === feedbackName) {
+            iconName = focused ? 'list' : 'list-outline';
+
+          } else if (rn === profileName) {
+            iconName = focused ? 'person' : 'person-outline';
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+          
+        },
+      })}
+      >
+
+      <Tab.Screen name={homeName} component={MapScreen} options={{ header: () => <Header title="ParkAnyWhere" />, }} />
+      <Tab.Screen name={feedbackName} component={FeedbackPage} />
+      <Tab.Screen name={profileName} component={ReviewPage} />
+
+    </Tab.Navigator>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-});
-
-export default MapScreen;
+export default MainPage;
