@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker , Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import PriceTag from './Views/PriceTag';
 import CarParkInfo from './Views/CarParkInfo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
 const MapScreen = () => {
@@ -48,7 +49,7 @@ const MapScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       {location && (
         <MapView
           style={styles.map}
@@ -77,7 +78,7 @@ const MapScreen = () => {
           ))}
         </MapView>
       )}
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -89,8 +90,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   map: {
-    width: '100%',
-    height: '100%',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 
