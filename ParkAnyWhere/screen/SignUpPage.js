@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     },
     image_imageStyle: {},
     createAccount: {
-        fontFamily: "roboto-700",
+        fontFamily: "roboto-bold",
         color: "#121212",
         fontSize: 30,
         textAlign: "center"
