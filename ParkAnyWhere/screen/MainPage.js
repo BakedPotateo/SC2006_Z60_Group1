@@ -24,11 +24,15 @@ function MainPage() {
         "tabBarInactiveTintColor": "grey",
         "tabBarLabelStyle": {
           "paddingBottom": 5,
-          "fontSize": 10
+          "fontSize": 12
+        },
+        "tabBarItemStyle": {
+          "paddingTop": 10
         },
         "tabBarStyle": [
           {
-            "display": "flex"
+            "display": "flex",
+            "height": 60
           },
           null
         ],
