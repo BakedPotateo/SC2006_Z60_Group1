@@ -12,6 +12,7 @@ import LoginScreen from './screen/LoginPage.js';
 import SignUpScreen from './screen/SignUpPage.js';
 import MainPage from './screen/MainPage.js'
 import Header from './screen/Components/Header.js';
+import Test from './screen/test.js';
 
 const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -56,11 +57,12 @@ export default function App() {
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="LoginPage" component={LoginScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="SignUpPage" component={SignUpScreen} options={{ headerShown: false }} />
+          {/* <Stack.Screen name="LoginPage" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="SignUpPage" component={SignUpScreen} options={{ headerShown: false }} /> */}
           <Stack.Screen name="MainPage" component={MainPage} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
+      {/* <Test/> */}
     </View>
   );
 }
