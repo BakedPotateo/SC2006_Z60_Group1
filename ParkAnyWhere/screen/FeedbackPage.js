@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, ImageBackground, TextInput } from "react-native";
+import { StyleSheet, Text, View, Button, ImageBackground, TextInput, Pressable } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import StarRating from "react-native-star-rating-widget";
 
@@ -19,36 +19,58 @@ const FeedbackPage = ({ navigation }) => {
 
     return (
       <View style={styles.container}>
+
+        <ImageBackground
+          source={require("../assets/LoginBG.png")}
+          resizeMode={"stretch"}
+          style={styles.backgroundImage}
+          imageStyle={styles.imageBG}
+        >
         
-        <Text style={styles.header}>What's Up</Text>
+        <View style={styles.content}>
 
-        <DropDownPicker
-          style={styles.dropDown}
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-        />
+          <Text style={styles.header}>What's Up</Text>
 
-        <StarRating
-          rating={rating}
-          onChange={setRating}
-        />
+          <DropDownPicker
+            containerProps={{
+              height: open === true ? 220 : null,
+            }}
+            style={styles.dropDown}
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder="choose a carpark"
+          />
 
-        <TextInput
-          style={styles.reviewInput}
-          onChangeText={setReview}
-          value={review}
-          placeholder='tell us about it'
-        />
+          <StarRating
+            rating={rating}
+            onChange={setRating}
+          />
 
-        <Button
-          style={styles.button}
-          title='enter'
-          //onPress
-        />
+          <TextInput
+            style={styles.reviewInput}
+            onChangeText={setReview}
+            value={review}
+            placeholder='tell us about it'
+          />
+
+          {/* add onPress handler */}
+          <Pressable style={styles.button}> 
+            <Text style={styles.buttonText}>enter</Text>
+          </Pressable>
+          {/* <Button
+            buttonStyle={styles.button}
+            color= "#ED7B7B"
+            title='enter'
+            //onPress
+          /> */}
+        
+        </View>
+
+        </ImageBackground>
 
       </View>
             
@@ -57,20 +79,53 @@ const FeedbackPage = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  imageBG: {
+    flex: 1,
+    width: "100%",
+  },
+  content: {
+    marginTop: "20%",
     alignItems: 'center',
     justifyContent: 'center'
   },
   header: {
-    fontSize: 30,
-    color: "black"
+    fontSize: 35,
+    color: "black",
+    fontFamily: "roboto-regular",
+    fontWeight: "bold",
+    color: "#ED7B7B",
+  },
+  dropDown: {
+    width: "50%",
+    marginTop: "7%",
+    marginLeft: "25%",
+    marginBottom: "7%"
   },
   reviewInput: {
     height: '40%',
-    width: '30%',
-    margin: 12,
+    width: '50%',
+    margin: "7%",
     borderWidth: 1,
     padding: 10,
+    borderRadius: 10
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "#ED7B7B",
+    marginBottom: "30%"
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontFamily: "roboto-regular",
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: "#fff",
   },
 })
 
