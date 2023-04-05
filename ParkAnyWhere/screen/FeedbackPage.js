@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, ImageBackground, TextInput, Pressable } from "react-native";
+import { StyleSheet, Text, View, ImageBackground, TextInput, Pressable } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import StarRating from "react-native-star-rating-widget";
 
@@ -13,9 +13,9 @@ const FeedbackPage = ({ navigation }) => {
         {label: 'Carpark C', value: 'Carpark C'}
       ]);
 
-      const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(0);
 
-      const [review, setReview] = useState('');
+    const [review, setReview] = useState('');
 
     return (
       <View style={styles.container}>
@@ -52,6 +52,7 @@ const FeedbackPage = ({ navigation }) => {
 
           <TextInput
             style={styles.reviewInput}
+            multiline
             onChangeText={setReview}
             value={review}
             placeholder='tell us about it'
@@ -61,12 +62,6 @@ const FeedbackPage = ({ navigation }) => {
           <Pressable style={styles.button}> 
             <Text style={styles.buttonText}>enter</Text>
           </Pressable>
-          {/* <Button
-            buttonStyle={styles.button}
-            color= "#ED7B7B"
-            title='enter'
-            //onPress
-          /> */}
         
         </View>
 
