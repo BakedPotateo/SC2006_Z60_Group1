@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Image, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, Image, ImageBackground, Dimensions } from "react-native";
 import { Card } from "react-native-paper";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,6 +7,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 const ProfilePage = ({ navigation }) => {
     return (
         
+        <ImageBackground 
+            source={require('../assets/LoginBG.png')} 
+            style={styles.backgroundImage} 
+            resizeMode="stretch"
+        >
         <View style={styles.container}>
 
             <View style={styles.usernameView}>
@@ -79,6 +84,7 @@ const ProfilePage = ({ navigation }) => {
                 
             </View>
         </View>
+        </ImageBackground>
        
       );
 }
@@ -88,6 +94,13 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
     },
+    backgroundImage: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+      },
     usernameView: {
         marginTop: 30,
         flexDirection: "row",
