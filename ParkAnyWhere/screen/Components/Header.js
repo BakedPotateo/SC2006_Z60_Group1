@@ -102,7 +102,7 @@ render() {
                 listView:{
                   position: 'absolute',
                   backgroundColor: '#ED7B7B',
-                  zIndex: 10,//Forcing it to front
+                  zIndex: 1,//Forcing it to front
                 },
               }}
               placeholder={"Where are you going?"}
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     marginLeft: '12%',
     height: 25,
     flexDirection: 'row',
-
+    zIndex: -1,
     width: '80%',
   },
   dateInput: {
@@ -321,6 +321,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 5,
+    zIndex: -1
   },
   toggleButton: {
     borderWidth: 1,
