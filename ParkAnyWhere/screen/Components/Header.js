@@ -112,6 +112,7 @@ render() {
               query={{
                 key: GOOGLE_PLACES_API_KEY,
                 language: 'en', // language of the results
+                components: 'country:sg',
               }}
               onPress={(data, details = null) => console.log(data)}
               onFail={(error) => console.error(error)}
