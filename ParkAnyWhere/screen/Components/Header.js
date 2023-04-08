@@ -7,6 +7,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Picker} from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
+import {
+  GooglePlaceDetail,
+  GooglePlacesAutocomplete,
+} from "react-native-google-places-autocomplete";
+
+const GOOGLE_PLACES_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
 class Header extends React.Component {
   constructor(props) {
@@ -88,12 +94,24 @@ render() {
             />
             <Text style={styles.companyName}>ParkAnyWhere</Text>
           </View>
-          <View style={styles.searchContainer}>
+          <View style={ styles.searchContainer }>
             <FeatherIcon name="search" style={styles.searchIcon} />
-            <TextInput
-              placeholder="Where are you going"
-              placeholderTextColor="#FFFFFF"
-              style={styles.searchInput}
+            <GooglePlacesAutocomplete
+              styles={{ 
+                textInput: styles.googleSearchContainer,
+                listView:{
+                  position: 'absolute',
+                  backgroundColor: '#ED7B7B',
+                  zIndex: 1,//Forcing it to front
+                },
+              }}
+              placeholder={"Where are you going?"}
+              query={{
+                key: GOOGLE_PLACES_API_KEY,
+                language: 'en', // language of the results
+              }}
+              onPress={(data, details = null) => console.log(data)}
+              onFail={(error) => console.error(error)}
             />
             <TouchableOpacity>
               <FontAwesomeIcon name="microphone" style={styles.microphoneIcon} />
@@ -208,7 +226,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     marginBottom: 20,
     width: '80%',
-    height: 35,
+    height: 40,
     backgroundColor: '#ED7B7B',
     marginLeft: '10%',
     shadowColor: '#000',
@@ -216,6 +234,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 2,
     elevation: 3,
+  },
+  googleSearchContainer: {
+    color: '#FFFFFF',
+    paddingLeft: 10,
+    paddingRight: 10,
+    height: 35,
+    backgroundColor: '#ED7B7B',
   },
   searchIcon: {
     fontSize: 20,
@@ -235,7 +260,7 @@ const styles = StyleSheet.create({
     marginLeft: '12%',
     height: 25,
     flexDirection: 'row',
-
+    zIndex: -1,
     width: '80%',
   },
   dateInput: {
@@ -296,6 +321,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 5,
+    zIndex: -1
   },
   toggleButton: {
     borderWidth: 1,

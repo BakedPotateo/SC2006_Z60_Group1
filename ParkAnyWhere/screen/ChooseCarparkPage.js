@@ -45,18 +45,7 @@
 //   return (
 //     <>
 //       <Text>{label}</Text>
-//       <GooglePlacesAutocomplete
-//         styles={{ textInput: styles.input }}
-//         placeholder={placeholder || ""}
-//         fetchDetails
-//         onPress={(data, details = null) => {
-//           onPlaceSelected(details);
-//         }}
-//         query={{
-//           key: GOOGLE_API_KEY,
-//           language: "pt-BR",
-//         }}
-//       />
+
 //     </>
 //   );
 // }

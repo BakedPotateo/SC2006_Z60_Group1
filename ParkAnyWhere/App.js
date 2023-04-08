@@ -12,6 +12,7 @@ import LoginScreen from './screen/LoginPage.js';
 import SignUpScreen from './screen/SignUpPage.js';
 import MainPage from './screen/MainPage.js'
 import Header from './screen/Components/Header.js';
+import Test from './screen/test.js';
 
 //firestore
 import { auth, db , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification} from './firebaseConfig';
