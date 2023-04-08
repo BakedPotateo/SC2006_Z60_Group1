@@ -1,17 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import TestPage from './screen/TestPage.js';
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+
 //Screens
 import LoginScreen from './screen/LoginPage.js';
 import SignUpScreen from './screen/SignUpPage.js';
 import MainPage from './screen/MainPage.js'
-import Header from './screen/Components/Header.js';
+
+//firestore
+import { auth, db , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification} from './firebaseConfig';
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -65,6 +68,29 @@ export default function App() {
   );
 }
 
+/*
+const fetchCarparkData = async () => {
+  try {
+    const response = await fetch('https://api.data.gov.sg/v1/transport/carpark-availability');
+    const data = await response.json();
+    const carparkData = data.items[0].carpark_data;
+    //const carparkCollection = firestore().collection('CarParks');
+
+    const carparkCollection = collection(db, 'CarParks');
+
+    carparkData.forEach(async (carpark) => {
+      const  carpark_number  = carpark.carpark_number;
+      const carparkDoc = doc(carparkCollection, carpark_number);
+      await setDoc(carparkDoc, { carpark_number });
+    });
+
+
+    console.log('Carpark data saved in Firestore');
+  } catch (error) {
+    console.error('Error fetching carpark data:', error);
+  }
+}
+*/
 
 const styles = StyleSheet.create({
   container: {
