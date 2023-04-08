@@ -42,7 +42,7 @@ const FeedbackPage = ({ navigation }) => {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
-            placeholder="choose a carpark"
+            placeholder="Choose a carpark"
           />
 
           <StarRating
@@ -55,12 +55,12 @@ const FeedbackPage = ({ navigation }) => {
             multiline
             onChangeText={setReview}
             value={review}
-            placeholder='tell us about it'
+            placeholder='Tell us about it'
           />
 
           {/* add onPress handler */}
           <Pressable style={styles.button}> 
-            <Text style={styles.buttonText}>enter</Text>
+            <Text style={styles.buttonText}>Submit</Text>
           </Pressable>
         
         </View>
