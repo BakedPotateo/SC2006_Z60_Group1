@@ -1,6 +1,6 @@
 import React, { useState , useEffect} from 'react';
 import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View , ImageBackground  , KeyboardAvoidingView , ScrollView} from 'react-native';
-import { auth, firestore , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification  } from '../firebaseConfig';
+import { auth, db , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification  } from '../firebaseConfig';
 import TestPage from './MainPage.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
