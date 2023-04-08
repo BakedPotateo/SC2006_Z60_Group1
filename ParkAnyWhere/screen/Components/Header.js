@@ -13,6 +13,7 @@ import {
 } from "react-native-google-places-autocomplete";
 
 const GOOGLE_PLACES_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
+const mapRef = React.createRef();
 
 class Header extends React.Component {
   constructor(props) {
@@ -75,8 +76,8 @@ class Header extends React.Component {
       this.hideTimePicker();
     }
   };
-
-render() {
+  
+  render() {
 
     return (
       <View>
@@ -115,9 +116,14 @@ render() {
                 language: 'en', // language of the results
                 components: 'country:sg',
               }}
-              onPress={(data, details = null) => console.log(data)}
+              fetchDetails={true}
+              onPress={(data = null, details) => {
+                console.log(details);
+                // this.moveMapTo(details.latitude, details.longitude);
+              }}
               onFail={(error) => console.error(error)}
-            />
+            >
+            </GooglePlacesAutocomplete> 
             <TouchableOpacity>
               <FontAwesomeIcon name="microphone" style={styles.microphoneIcon} />
             </TouchableOpacity>

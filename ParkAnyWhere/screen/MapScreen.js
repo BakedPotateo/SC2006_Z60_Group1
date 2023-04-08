@@ -5,6 +5,8 @@ import * as Location from 'expo-location';
 import PriceTag from './Views/PriceTag';
 import CarParkInfo from './Views/CarParkInfo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Header } from 'react-native-elements';
+import MainPage from './MainPage';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
 const MapScreen = () => {
