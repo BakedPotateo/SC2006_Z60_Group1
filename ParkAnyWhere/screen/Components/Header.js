@@ -101,6 +101,7 @@ render() {
                 textInput: styles.googleSearchContainer,
                 listView:{
                   position: 'absolute',
+                  marginTop: 40,
                   backgroundColor: '#ED7B7B',
                   zIndex: 1,//Forcing it to front
                 },
@@ -137,6 +138,7 @@ render() {
             value={this.state.date}
             mode="date"
             onChange={this.handleConfirmDate}
+            dateFormat='day month year'
           />
         )}
 
@@ -309,7 +311,7 @@ const styles = StyleSheet.create({
   signInButton: {
     paddingVertical: 3,
     paddingHorizontal: 10,
-    backgroundColor: '#ff6666',
+    backgroundColor: '#ED7B7B',
     borderRadius: 20,
     marginLeft: 15,
   },
