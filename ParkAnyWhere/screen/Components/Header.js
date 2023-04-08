@@ -33,7 +33,7 @@ class Header extends React.Component {
       toggleButtonText: prevState.toggleButtonText === 'Map' ? 'List' : 'Map',
     }));
     if(this.state.toggleButtonText == 'Map'){
-      this.props.navigation.navigate('LoginPage'); //change this after getting new file
+      this.props.navigation.navigate('Results'); //change this after getting new file
     } else {
       this.props.navigation.navigate('MapScreen');
     }
