@@ -1,8 +1,8 @@
-export const SET_LOCATION = 'SET_LOCATION';
+// export const SET_DESTINATION = 'SET_DESTINATION';
 
-export const setLocation = ( latitude, longitude ) => dispatch => {
-    dispatch ({
-        type: SET_LOCATION,
-        payload: ( latitude, longitude )
-    })
-};
+// export const setDestination = ( latitude, longitude ) => dispatch => {
+//     dispatch ({
+//         type: SET_DESTINATION,
+//         payload: ( latitude, longitude )
+//     })
+// };

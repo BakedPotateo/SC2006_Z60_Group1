@@ -1,8 +1,20 @@
-import { SET_LOCATION } from "./actions";
+// import { SET_DESTINATION } from "./actions";
 
-const initialState = {
-    latitude: 0,
-    longitude: 0
-};
+// const initialState = {
+//     latitude: 0,
+//     longitude: 0
+// };
 
-function userReducer ( state = initialState, action)
+// function changeCoordinates ( state = initialState, action ) {
+//     switch(action.type) {
+//         case SET_DESTINATION:
+//             return {
+//                 ...state, 
+//                 latitude: action.payload.latitude, 
+//                 longitude: action.payload.longitude
+//             };
+//         default: return state;
+//     }
+// }
+
+// export default changeCoordinates;
