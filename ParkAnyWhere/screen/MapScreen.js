@@ -17,16 +17,22 @@ const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
 
-const MapScreen = () => {
+function MapScreen({ route }) {
   const [region, setRegion] = useState(null);
   const [marker, setMarker] = useState(null);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [carParks, setCarParks] = useState([]);
   const markerRefs = useRef([]);
+  const placeDetails = route.params?.placeDetails;
+  const mapViewRef = useRef();
 
   // Get the user's current location and set it as the initial region
-  useEffect(() => {
+    useEffect(() => {
+      if (placeDetails) {
+        console.log('Selected place details:', placeDetails);
+        fetchPlaceDetails(placeDetails.place_id);
+      }
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -42,7 +48,7 @@ const MapScreen = () => {
       //fetchNearbyCarParks(location.coords);
       fetchCarParksFromFirebase();
     })();
-  }, []);
+  }, [placeDetails]);
 
   const fetchCarParksFromFirebase = async () => {
     try {
@@ -56,6 +62,35 @@ const MapScreen = () => {
       console.error('Error fetching car parks from Firebase:', error);
     }
   };
+
+  const fetchPlaceDetails = async (placeId) => {
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry&key=${GOOGLE_MAPS_API_KEY}`;
+  
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.status === 'OK' && data.result && data.result.geometry && data.result.geometry.location) {
+        const { lat, lng } = data.result.geometry.location;
+        const camera = {
+          center: {
+            latitude: lat,
+            longitude: lng,
+          },
+          pitch: 0,
+          heading: 0,
+          altitude: 0,
+          zoom: 16, // Adjust the zoom level as needed
+        };
+  
+        mapViewRef.current.animateCamera(camera, { duration: 1000 });
+      }
+    } catch (error) {
+      console.error('Error fetching place details:', error);
+    }
+  };
+  
+  
+  
 
   const fetchNearbyCarParks = async ({ latitude, longitude }) => {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1500&type=parking&key=${GOOGLE_MAPS_API_KEY}`;
@@ -71,14 +106,14 @@ const MapScreen = () => {
 
   const getPriceTag = (carPark) => {
     // Implement a function to fetch or calculate the car park price
-
-    return `$${Math.floor(Math.random() * 10)}/hour`;
+    return carPark["weekdayRate"] + '/hour';
   };
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       {location && (
         <MapView
+          ref={mapViewRef}
           style={styles.map}
           provider={PROVIDER_GOOGLE}
           region={{
@@ -88,6 +123,11 @@ const MapScreen = () => {
             longitudeDelta: 0.0421,
           }}
         >
+          <Marker
+            coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+            pinColor="blue"
+            title="Current Location"
+          />
          {carParks.map((carPark) => {
           // Check if the geometries array is not empty and if the coordinates property exists
           if (carPark.geometries && carPark.geometries.length > 0 && carPark.geometries[0].hasOwnProperty("coordinates")) {

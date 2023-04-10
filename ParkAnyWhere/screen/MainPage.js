@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 // Screens
 import MapScreen from './MapScreen';
@@ -16,6 +17,13 @@ const profileName = "Profile";
 const Tab = createBottomTabNavigator();
 
 function MainPage() {
+
+  const navigation = useNavigation();
+
+  const handlePlaceSelected = (details) => {
+    navigation.navigate(homeName, { placeDetails: details });
+  };
+
   return (
     <Tab.Navigator
       initialRouteName={homeName}
@@ -59,12 +67,14 @@ function MainPage() {
         },
       })}
       >
+        
 
-      <Tab.Screen name={homeName} component={MapScreen} options={{ header: () => <Header title="ParkAnyWhere" />, }} />
+      <Tab.Screen name={homeName} component={MapScreen} options={{ header: () => <Header title="ParkAnyWhere" onPlaceSelected={handlePlaceSelected} />, }} />
       <Tab.Screen name={feedbackName} component={FeedbackPage} options={{headerShown: false}}/>
       <Tab.Screen name={profileName} component={ProfilePage} options={{headerShown: false}}/>
 
     </Tab.Navigator>
+    
   );
 }
 

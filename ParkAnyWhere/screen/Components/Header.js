@@ -25,7 +25,13 @@ class Header extends React.Component {
       toggleButtonText: 'Map',
       checked: false,
       selectedValue: '',
+      searchQuery: '',
     };
+  }
+
+  handlePlaceSelected(details) {
+    // Call the prop passed from MainPage
+    this.props.onPlaceSelected(details);
   }
 
   handleToggle = () => {
@@ -115,7 +121,7 @@ render() {
                 language: 'en', // language of the results
                 components: 'country:sg',
               }}
-              onPress={(data, details = null) => console.log(data)}
+              onPress={(data, details = null) => this.handlePlaceSelected(data)}
               onFail={(error) => console.error(error)}
             />
             <TouchableOpacity>
