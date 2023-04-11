@@ -4,7 +4,69 @@ import { Card } from "react-native-paper";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+import { auth, db , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification} from '../firebaseConfig';
+import { collection, doc, setDoc , query, getDocs} from 'firebase/firestore';
+
 const ProfilePage = ({ navigation }) => {
+    const [username, setUsername] = useState([]);
+    const [carpark, setCarpark] = useState([]);
+
+    const getUserFromDB = async () => {
+        try {
+            const customersCollection = collection(db, 'Customers');
+            const customersSnapshot = await getDocs(customersCollection);
+            const customersData = customersSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            setUsername(customersData[0].Username);
+            getParkingHistoryFromDB(customersData[0].CustomerID);
+          } catch (error) {
+            console.error('Error fetching users from Firebase:', error);
+          }
+    }
+
+    const getParkingHistoryFromDB = async (userID) => {
+        try {
+            const pHistoryCollection = collection(db, 'ParkingHistory');
+            const pHistorySnapshot = await getDocs(pHistoryCollection);
+            const pHistoryData = pHistorySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+
+            const carparkIDs = [];
+            for (let i=0; i < pHistoryData.length; i++) {
+                if (pHistoryData[i].CustomerID == userID) {
+                    carparkIDs.push(pHistoryData[i].CarParkID);
+                }
+            }
+            
+            getCarparksFromDB(carparkIDs);
+          } catch (error) {
+            console.error('Error fetching car parks from Firebase:', error);
+          }
+    }
+
+    const getCarparksFromDB = async (carparkIDs) => {
+        try {
+            const carparkCollection = collection(db, 'CarParks');
+            const carparkSnapshot = await getDocs(carparkCollection);
+            const carparkData = carparkSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+
+            const carparkNames = [];
+            for (let i=0; i < carparkIDs.length; i++) {
+                // Get the entry from the CarPark database based on its carparkID
+                // Push the carpark name to the carparkNames array
+            }
+            
+            // Use the setCarpark useState for setting the carpark names in the app
+            // Use the carparkNames array to set the names dynamically
+        } catch (error) {
+            console.error('Error fetching car parks from Firebase:', error);
+        }
+    }
+
+    getUserFromDB();
+    
+
     return (
         
         <ImageBackground 
@@ -20,7 +82,7 @@ const ProfilePage = ({ navigation }) => {
                 resizeMode="contain"
                 style={styles.profilePic} 
                 />
-                <Text style={styles.username}>Username123</Text>
+                <Text style={styles.username}>{username}</Text>
             </View>
 
             <View style={styles.cardsView}>
