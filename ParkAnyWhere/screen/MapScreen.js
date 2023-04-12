@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   map: {
-    position: 'absolute',
+    // position: 'absolute',
     left: 0,
     top: 0,
     width: Dimensions.get('window').width,
