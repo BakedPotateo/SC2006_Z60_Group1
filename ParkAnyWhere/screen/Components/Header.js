@@ -5,9 +5,10 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-//import Results from '../Results';
 import {Picker} from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
+import Results from '../Results';
+
 import {
   GooglePlaceDetail,
   GooglePlacesAutocomplete,
@@ -166,10 +167,8 @@ render() {
             onChange={this.handleConfirmTime}
           />
         )}
-          <TouchableOpacity style={styles.signInButton}>
-            <FeatherIcon name="arrow-right" style={styles.icon3} />
-          </TouchableOpacity>
-          </View>
+          
+        </View>
         </View>
       </ImageBackground>
 
@@ -256,11 +255,11 @@ const styles = StyleSheet.create({
     height: 35,
     backgroundColor: '#ED7B7B',
   },
-  searchIcon: {
-    fontSize: 20,
-    marginRight: 5,
-    color: '#FFFFFF',
-  },
+  //searchIcon: {
+   // fontSize: 20,
+   // marginRight: 5,
+   // color: '#FFFFFF',
+  //},
   searchInput: {
     color: "#FFFFFF",
     flex: 1,
@@ -280,7 +279,7 @@ const styles = StyleSheet.create({
   dateInput: {
     flex: 1,
     marginRight: 10,
-    paddingLeft: 35,
+    paddingLeft: 40,
     paddingRight: 10,
     backgroundColor: '#ED7B7B',
     shadowColor: '#000',
@@ -293,8 +292,8 @@ const styles = StyleSheet.create({
   },
   timeInput: {
     flex: 1,
-    paddingLeft: 35,
-    paddingRight: 10,
+    paddingLeft: 50,
+    paddingRight: 50,
     backgroundColor: '#ED7B7B',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
