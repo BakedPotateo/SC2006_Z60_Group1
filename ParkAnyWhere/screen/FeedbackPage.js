@@ -1,88 +1,120 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, ImageBackground, TextInput, Pressable } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground } from "react-native";
 import StarRating from "react-native-star-rating-widget";
+import DropDownPicker from "react-native-dropdown-picker";
+import { db } from '../firebaseConfig';
 
+const FeedbackForm = ({ customerID }) => {
+  const [comment, setComment] = useState('');
+  const [rating, setRating] = useState(0);
+  const [carParks, setCarParks] = useState([]);
+  const [selectedCarPark, setSelectedCarPark] = useState(null);
+  
+  useEffect(() => {
+    const fetchCarParks = async () => {
+      const parkingHistorySnapshot = await db.collection('ParkingHistory')
+        .where('CustomerID', '==', customerID)
+        .get();
+      const carParkIDs = parkingHistorySnapshot.docs.map(doc => doc.data().CarParkID);
 
-const FeedbackPage = ({ navigation }) => {
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-        {label: 'CarparkA', value: 'Carpark A'},
-        {label: 'Carpark B', value: 'Carpark B'},
-        {label: 'Carpark C', value: 'Carpark C'}
-      ]);
+      const carParksSnapshot = await db.collection('CarParks')
+        .where('ppCode', 'in', carParkIDs)
+        .get();
+      const carParksList = carParksSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return { label: data.ppName, value: data.ppCode };
+      });
 
-    const [rating, setRating] = useState(0);
+      setCarParks(carParksList);
+      setSelectedCarPark(carParksList.length > 0 ? carParksList[0].value : null);
+    };
 
-    const [review, setReview] = useState('');
+    fetchCarParks();
+  }, [customerID]);
 
-    return (
-      <View style={styles.container}>
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (rating && comment.trim() !== '' && selectedCarPark) {
+      db.collection('Feedback').add({
+        CarParkID: selectedCarPark,
+        CustomerID: customerID,
+        comment: comment,
+        rating: rating
+      })
+      .then(() => {
+        console.log('Feedback submitted successfully!');
+        setComment('');
+        setRating(0);
+      })
+      .catch((error) => {
+        console.error('Error submitting feedback: ', error);
+      });
+    }
+  };
 
-        <ImageBackground
-          source={require("../assets/LoginBG.png")}
-          resizeMode={"stretch"}
-          style={styles.backgroundImage}
-          imageStyle={styles.imageBG}
-        >
-        
-        <View style={styles.content}>
+  return (
+    <View style={styles.container}>
 
-          <Text style={styles.header}>What's Up</Text>
+      <ImageBackground
+        source={require("../assets/LoginBG.png")}
+        resizeMode={"stretch"}
+        style={styles.backgroundImage}
+        imageStyle={styles.imageBG}
+      ></ImageBackground>
 
-          <DropDownPicker
-            containerProps={{
-              height: open === true ? 220 : null,
-            }}
-            style={styles.dropDown}
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            placeholder="Choose a carpark"
-          />
+      <View style={styles.content}></View>
 
-          <StarRating
-            rating={rating}
-            onChange={setRating}
-          />
+      <Text style={styles.header}>What's Up</Text>
 
-          <TextInput
-            style={styles.reviewInput}
-            multiline
-            onChangeText={setReview}
-            value={review}
-            placeholder='Tell us about it'
-          />
+      {carParks.length > 0 ? (
+        <DropDownPicker
+          items={carParks}
+          defaultValue={selectedCarPark}
+          containerStyle={{ height: 40, width: '50%' }}
+          style={styles.dropDown}
+          itemStyle={{
+            justifyContent: 'flex-start',
+          }}
+          dropDownStyle={{ backgroundColor: '#fafafa' }}
+          onChangeItem={(item) => setSelectedCarPark(item.value)}
+        />
+      ) : (
+        <Text>Loading car parks...</Text>
+      )}
 
-          {/* add onPress handler */}
-          <Pressable style={styles.button}> 
-            <Text style={styles.buttonText}>Submit</Text>
-          </Pressable>
-        
-        </View>
+      <StarRating rating={rating} onChange={setRating} />
 
-        </ImageBackground>
+      <TextInput
+        style={styles.reviewInput}
+        multiline
+        onChangeText={setComment}
+        value={comment}
+        placeholder="Tell us about it"
+      />
 
-      </View>
-            
-        
-    )
-}
+      <Pressable 
+      style={styles.button}
+      onPress={handleSubmit}
+      >
+        <Text style={styles.buttonText}>Submit</Text>         
+      </Pressable>
+
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-  imageBG: {
-    flex: 1,
-    width: "100%",
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
   },
+
   content: {
     marginTop: "20%",
     alignItems: 'center',
     justifyContent: 'center'
   },
+
   header: {
     fontSize: 35,
     color: "black",
@@ -90,20 +122,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#ED7B7B",
   },
+
   dropDown: {
     width: "50%",
     marginTop: "7%",
     marginLeft: "25%",
     marginBottom: "7%"
   },
+
   reviewInput: {
-    height: '40%',
-    width: '50%',
+    height: "40%",
+    width: "50%",
     margin: "7%",
     borderWidth: 1,
     padding: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
+
   button: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -122,6 +157,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: "#fff",
   },
-})
+});
 
-export default FeedbackPage;
+export default FeedbackForm;
