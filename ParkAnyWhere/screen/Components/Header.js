@@ -29,23 +29,23 @@ class Header extends React.Component {
       selectedValue: '',
       searchQuery: '',
     };
+    this.navigation = props.navigation;
+    this.onToggleView = props.onToggleView;
   }
 
   handlePlaceSelected(details) {
     // Call the prop passed from MainPage
     this.props.onPlaceSelected(details);
   }
-
+  
   handleToggle = () => {
     this.setState((prevState) => ({
-      toggleButtonText: prevState.toggleButtonText === 'Map' ? 'List' : 'Map',
+      isMapView: !prevState.isMapView,
+      toggleButtonText: prevState.isMapView ? 'List' : 'Map',
     }));
-    if(this.state.toggleButtonText == 'Map'){
-      this.props.navigation.navigate('Results'); //change this after getting new file
-    } else {
-      this.props.navigation.navigate('MapScreen');
-    }
+    this.onToggleView(!this.state.isMapView);
   };
+  
 
   handleCheckboxChange = () => {
     this.setState((prevState) => ({ checked: !prevState.checked }));

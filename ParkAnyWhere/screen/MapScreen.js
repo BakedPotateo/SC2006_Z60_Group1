@@ -69,7 +69,7 @@ function MapScreen({ route }) {
       //setCarParks(carParksData);
       const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
       //const authToken = getAuthToken(accessKey);
-      getCarParkAvail(accessKey, "u5s--2WMbUA87@4mRecE3P2ax9z36xp8dba-000r-+K1074bsUabYjcX82MbVW-74-ad41990-d0z-Gm28A8kSNXEy7@9c8-Xupd" , carParksData);
+      getCarParkAvail(accessKey, "9fV9TEJ@5cRr8x15434ZF1-30nwvS7CbMh0c015Pk5e2sc712BNfGQFtxcK39v9m72w58C39-fq7Zd165dD2+1-H7d2fuA3T7Kf4" , carParksData);
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
     }
@@ -170,9 +170,10 @@ function MapScreen({ route }) {
           region={{
             latitude: location.latitude,
             longitude: location.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 0.0302,
+            longitudeDelta: 0.0302,
           }}
+         
         >
           <Marker
             coordinate={{ latitude: location.latitude, longitude: location.longitude }}
