@@ -5,7 +5,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Results from '../Results';
+//import Results from '../Results';
 import {Picker} from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
 import {
