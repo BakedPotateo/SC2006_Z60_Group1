@@ -26,12 +26,20 @@ function MapScreen({ route }) {
   const markerRefs = useRef([]);
   const placeDetails = route.params?.placeDetails;
   const mapViewRef = useRef();
+  const [tracksViewChanges, setTracksViewChanges] = useState(false);
 
   // Get the user's current location and set it as the initial region
     useEffect(() => {
       if (placeDetails) {
         console.log('Selected place details:', placeDetails);
         fetchPlaceDetails(placeDetails.place_id);
+      }
+      if (tracksViewChanges) {
+        const timeout = setTimeout(() => {
+          setTracksViewChanges(false);
+        }, 1000);
+    
+        return () => clearTimeout(timeout);
       }
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -48,20 +56,63 @@ function MapScreen({ route }) {
       //fetchNearbyCarParks(location.coords);
       fetchCarParksFromFirebase();
     })();
-  }, [placeDetails]);
+  }, [placeDetails , tracksViewChanges]);
 
   const fetchCarParksFromFirebase = async () => {
+    
     try {
       const carParksCollection = collection(db, 'CarParks');
       const carParksSnapshot = await getDocs(carParksCollection);
       const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       //print out the data
       //console.log(carParksData);
-      setCarParks(carParksData);
+      //setCarParks(carParksData);
+      const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
+      //const authToken = getAuthToken(accessKey);
+      getCarParkAvail(accessKey, "u5s--2WMbUA87@4mRecE3P2ax9z36xp8dba-000r-+K1074bsUabYjcX82MbVW-74-ad41990-d0z-Gm28A8kSNXEy7@9c8-Xupd" , carParksData);
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
     }
+
+   
+    
   };
+
+  const getCarParkAvail = async (accessKey, token, carparkData) => {
+    try {
+      const url = 'https://www.ura.gov.sg/uraDataService/invokeUraDS?service=Car_Park_Availability';
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'AccessKey': accessKey,
+          'Token': token
+        }
+      });
+  
+      const data = await response.json();
+      const carParkDetails = data.Result;
+      console.log('Car park details:', carParkDetails);
+  
+      const updatedCarParksData = carparkData.map((carPark) => {
+        const foundCarPark = carParkDetails.find(cp => cp.carkparkNo === carPark.carParkNo);
+        if (foundCarPark) {
+          return {
+            ...carPark,
+            lotsAvailable: foundCarPark.lotsAvailable,
+            totalLots: foundCarPark.totalLots
+          };
+        } else {
+          return carPark;
+        }
+      });
+  
+      setCarParks(updatedCarParksData);
+    } catch (error) {
+      console.error('Error fetching car park details:', error);
+    }
+  };
+  
+
 
   const fetchPlaceDetails = async (placeId) => {
     const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry&key=${GOOGLE_MAPS_API_KEY}`;
@@ -142,7 +193,7 @@ function MapScreen({ route }) {
                   latitude: latitude,
                   longitude: longitude,
                 }}
-                tracksViewChanges={true}
+                tracksViewChanges={tracksViewChanges}
               >
                 <PriceTag price={getPriceTag(carPark)} />
                 <Callout>
@@ -171,7 +222,34 @@ const styles = StyleSheet.create({
     top: 0,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+    ...StyleSheet.absoluteFillObject,
   },
 });
+
+const getAuthToken = async (accessKey) => {
+  try {
+    const url = 'https://www.ura.gov.sg/uraDataService/insertNewToken.action';
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'AccessKey': accessKey
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.Status === 'Success') {
+      console.log('Authentication token:', data.Result);
+      return data.Result;
+    } else {
+      console.error('Error getting authentication token:', data.Message);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching authentication token:', error);
+    return null;
+  }
+};
+
 
 export default MapScreen;

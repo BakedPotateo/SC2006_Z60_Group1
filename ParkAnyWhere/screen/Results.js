@@ -7,7 +7,7 @@ import * as Location from 'expo-location';
 import PriceTag from './Views/PriceTag';
 import CarParkInfo from './Views/CarParkInfo';
 
-const GOOGLE_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA'; // Replace with your API key
+const GOOGLE_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA'; 
 
 const Results = ({ route }) => {
   const { searchTerm, location } = route.params;

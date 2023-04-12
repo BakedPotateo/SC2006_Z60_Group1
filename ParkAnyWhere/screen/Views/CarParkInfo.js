@@ -1,26 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const CarParkInfo = ({ carParkInfo }) => (
+const CarParkInfo = ({ carParkInfo }) => {
+
+  const [parkingSystem, setParkingSystem] = useState(carParkInfo.parkingSystem);
+
+  useEffect(() => {
+    if (carParkInfo.parkingSystem === "C") {
+      setParkingSystem("Coupon");
+    } else {
+      setParkingSystem("Electronic");
+    }
+  }, [carParkInfo]);
+
+  return (
     <View style={styles.container}>
-        <Text style={styles.text}>{carParkInfo.name}</Text>
-        <Text style={styles.text}>{carParkInfo.address}</Text>
+      <Text style={styles.title}>{carParkInfo.ppName}</Text>
+      <Text style={styles.detail}>Weekday Rate: {carParkInfo.weekdayRate}/hour</Text>
+      <Text style={styles.detail}>Parking System : {carParkInfo.parkingSystem}</Text>
+      <Text style={styles.detail}>Lots Available : {carParkInfo.lotsAvailable}</Text>
+      <Text style={styles.detail}>Total Lots : {carParkInfo.parkCapacity}</Text>
     </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-      backgroundColor: 'white',
-      borderRadius: 3,
-      padding: 6,
-    },
-    title: {
-      fontWeight: 'bold',
-      marginBottom: 4,
-    },
-    info: {
-      fontSize: 12,
-    },
-  });
-  
-  export default CarParkInfo;
+  container: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 5,
+    minWidth: 250,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  detail: {
+    fontSize: 14,
+    marginBottom: 3,
+  },
+});
+
+export default CarParkInfo;
