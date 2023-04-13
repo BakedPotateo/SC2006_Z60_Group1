@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from 'react';
-import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View , ImageBackground  , KeyboardAvoidingView , ScrollView} from 'react-native';
+import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View , ImageBackground  , KeyboardAvoidingView , ScrollView, Modal} from 'react-native';
 import { auth, db , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification  } from '../firebaseConfig';
 import TestPage from './MainPage.js';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,6 +14,14 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const displayError = (message) => {
+        text = message;
+        setModalVisible(true);
+        setErrorMsg(message);
+   };
+
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -28,6 +36,7 @@ const LoginScreen = ({ navigation }) => {
         }); 
       })
       .catch((error) => {
+        displayError('Error logging in');
         console.log('Error logging in', error);
       });
   };
@@ -89,7 +98,25 @@ const LoginScreen = ({ navigation }) => {
                   <Text style={styles.create}>Create</Text>
                 </TouchableOpacity>
               </View>
-              </View>
+                </View>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.errorText}>{'Error logging in'}</Text>
+                            <TouchableOpacity
+                                onPress={() => setModalVisible(false)}
+                                style={styles.closeButton}
+                            >
+                                <Text style={styles.closeButtonText}>Close</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
             </KeyboardAwareScrollView>
           </ImageBackground>
       
@@ -100,6 +127,36 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
+    modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+      color: '#000000',
+    marginBottom: 20,
+  },
+  closeButton: {
+    backgroundColor:'#ED7B7B',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  closeButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
     image: {
       flex: 1,
       resizeMode: 'stretch',
