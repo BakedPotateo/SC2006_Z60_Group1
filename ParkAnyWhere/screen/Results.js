@@ -6,8 +6,6 @@ import * as Location from 'expo-location';
 import CarParkInfo from './Views/CarParkInfo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-
-
 // firebase
 import { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification } from '../firebaseConfig';
 import { collection, doc, setDoc, query, getDocs } from 'firebase/firestore';
@@ -17,7 +15,7 @@ import proj4 from 'proj4';
 const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs';
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
-function FlatListScreen({ route }) {
+function FlatListScreen({ route , indoorOutdoor , CheckboxChange }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [carParks, setCarParks] = useState([]);
@@ -29,69 +27,32 @@ function FlatListScreen({ route }) {
         setErrorMsg('Permission to access location was denied');
         return;
       }
-  
-      if (route.params && route.params.selectedLocation) {
-        setLocation({
-          latitude: route.params.selectedLocation.lat,
-          longitude: route.params.selectedLocation.lng,
-        });
-        fetchCarParksFromFirebase();
-      } else {
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location.coords);
-        fetchCarParksFromFirebase(location.coords);
-      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      //testing AT NTU 1.3484010698533575, 103.68322053068263
+      location.coords.latitude = 1.3484010698533575;
+      location.coords.longitude = 103.68322053068263;
+      setLocation(location.coords);
+      fetchCarParksFromFirebase();
     })();
-  }, [route.params]);
-  
-  
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of the Earth in km
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; // Distance in km
-    return d;
-  };
-  
-  const deg2rad = (deg) => {
-    return deg * (Math.PI / 180);
-  };
-  
-  const fetchCarParksFromFirebase = async (location) => {
+  }, [indoorOutdoor, CheckboxChange]);
+
+  const fetchCarParksFromFirebase = async () => {
     try {
       const carParksCollection = collection(db, 'CarParks');
       const carParksSnapshot = await getDocs(carParksCollection);
-      let carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-      
-      // Filter car parks based on distance
-      carParksData = carParksData.filter(carPark => {
-        if (carPark.geometries && carPark.geometries.length > 0 && carPark.geometries[0].hasOwnProperty("coordinates")) {
-          const coordinates = carPark.geometries[0]["coordinates"].split(',');
-          const eastings = parseFloat(coordinates[0]);
-          const northings = parseFloat(coordinates[1]);
-          const [longitude, latitude] = proj4(svy21Proj, wgs84Proj, [eastings, northings]);
-  
-          // Calculate the distance in km
-          const distance = calculateDistance(location.latitude, location.longitude, latitude, longitude);
-  
-          // Return true if the distance is within 5km
-          return distance <= 5;
-        }
-        return false;
-      });
-  
+      const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
-      getCarParkAvail(accessKey, "9fV9TEJ@5cRr8x15434ZF1-30nwvS7CbMh0c015Pk5e2sc712BNfGQFtxcK39v9m72w58C39-fq7Zd165dD2+1-H7d2fuA3T7Kf4", carParksData);
+      getCarParkAvail(accessKey, "8JauXya9997qWfV8M414U2THbv4-270a7h8@e149dv7BDfZdjQ1gZ313MMVt3d90-s@m43--2b9-fca1f93-s9c1e143mdM7-db9", carParksData);
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
     }
   };
-  
-  
+
+  handleIndoorOutdoorChange = (indoorOutdoor) => {
+    // Handle the indoor/outdoor change here
+    console.log("Indoor/Outdoor:", indoorOutdoor);
+  };
 
   const getCarParkAvail = async (accessKey, token, carparkData) => {
     try {
@@ -109,38 +70,81 @@ function FlatListScreen({ route }) {
       console.log('Car park details:', carParkDetails);
   
       const updatedCarParksData = carparkData.map((carPark) => {
-        const foundCarPark = carParkDetails.find(cp => cp.carkparkNo === carPark.carParkNo);
+        let foundCarPark = null;
+        //console.log(counter++);
+        // Iterate through the carParkDetails array to find a matching carPark
+        for (const cp of carParkDetails) {
+          if (cp.carparkNo == carPark.ppCode) {
+            foundCarPark = cp;
+            //console.log(cp.carparkNo);
+            //console.log(carPark.ppCode);
+            break;
+          }
+        }
+  
         if (foundCarPark) {
+          // If found, update car park data by adding available lots
           return {
             ...carPark,
             lotsAvailable: foundCarPark.lotsAvailable,
-            totalLots: foundCarPark.totalLots
           };
         } else {
           return carPark;
         }
       });
   
-      setCarParks(updatedCarParksData, location);
+      setCarParks(updatedCarParksData);
     } catch (error) {
       console.error('Error fetching car park details:', error);
     }
   };
 
-      const renderItem = ({ item }) => {
-        if (item.geometries && item.geometries.length > 0 && item.geometries[0].hasOwnProperty("coordinates")) {
-          const coordinates = item.geometries[0]["coordinates"].split(',');
-          const eastings = parseFloat(coordinates[0]);
-          const northings = parseFloat(coordinates[1]);
-          const [longitude, latitude] = proj4(svy21Proj, wgs84Proj, [eastings, northings]);
 
+  const renderItem = ({ item }) => {
+    if (
+      item.geometries &&
+      item.geometries.length > 0 &&
+      item.geometries[0].hasOwnProperty("coordinates") &&
+      item.lotsAvailable !== undefined &&
+      item.lotsAvailable !== null
+    ) {
+      const coordinates = item.geometries[0]["coordinates"].split(",");
+      const eastings = parseFloat(coordinates[0]);
+      const northings = parseFloat(coordinates[1]);
+      const [longitude, latitude] = proj4(svy21Proj, wgs84Proj, [
+        eastings,
+        northings,
+      ]);
+  
+      if (CheckboxChange === false && item.electric === "N") {
+        return;
+      } else {
+        if (indoorOutdoor === "Outdoors") {
+          if (item.indoor == "N") {
+            return (
+              <View style={styles.item}>
+                <CarParkInfo carParkInfo={item} />
+              </View>
+            );
+          }
+        } else if (indoorOutdoor === "Indoors") {
+          if (item.indoor == "Y") {
+            return (
+              <View style={styles.item}>
+                <CarParkInfo carParkInfo={item} />
+              </View>
+            );
+          }
+        } else {
           return (
             <View style={styles.item}>
               <CarParkInfo carParkInfo={item} />
             </View>
           );
         }
-      };
+      }
+    }
+  };
       
       return (
         <View style={styles.container}>
@@ -169,5 +173,4 @@ function FlatListScreen({ route }) {
     });
 
     export default FlatListScreen;
-
 
