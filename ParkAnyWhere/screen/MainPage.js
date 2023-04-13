@@ -19,6 +19,7 @@
 
   function MainPage() {
     const [isMapView, setIsMapView] = React.useState(true);
+    const [indoorOutdoor, setIndoorOutdoor] = React.useState(null);
     const navigation = useNavigation();
 
     const handlePlaceSelected = (details) => {
@@ -28,6 +29,12 @@
     const toggleView = (isMap) => {
       setIsMapView(isMap);
     };
+
+    
+  handleIndoorOutdoorChange = (indoorOutdoor) => {
+    // Handle the indoor/outdoor change here
+    setIndoorOutdoor(indoorOutdoor);
+  };
 
     return (
       <Tab.Navigator
@@ -73,21 +80,27 @@
         >
           
       
-      <Tab.Screen
-        name={homeName}
-        children={(props) => (isMapView ? <MapScreen {...props} /> : <Results {...props} />)}
-        options={{
-          header: () => (
-            <Header
-              title="ParkAnyWhere"
-              onPlaceSelected={handlePlaceSelected}
-              navigation={navigation}
-              onToggleView={toggleView}
-            />
-          ),
-        }}
-      />
-
+          <Tab.Screen
+            name={homeName}
+            children={(props) => (
+              isMapView ? (
+                <MapScreen {...props} indoorOutdoor={indoorOutdoor} />
+              ) : (
+                <Results {...props} />
+              )
+            )}
+            options={{
+              header: () => (
+                <Header
+                  title="ParkAnyWhere"
+                  onPlaceSelected={handlePlaceSelected}
+                  navigation={navigation}
+                  onToggleView={toggleView}
+                  onIndoorOutdoorChange={handleIndoorOutdoorChange}
+                />
+              ),
+            }}
+          />
 
         <Tab.Screen name={feedbackName} component={FeedbackPage} options={{headerShown: false}}/>
         <Tab.Screen name={profileName} component={ProfilePage} options={{headerShown: false}}/>

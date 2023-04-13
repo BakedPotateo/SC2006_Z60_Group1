@@ -20,7 +20,7 @@ const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
 
-function MapScreen({ route }) {
+function MapScreen({ route , indoorOutdoor}) {
   const [region, setRegion] = useState(null);
   const [marker, setMarker] = useState(null);
   const [location, setLocation] = useState(null);
@@ -37,6 +37,7 @@ function MapScreen({ route }) {
 
   // Get the user's current location and set it as the initial region
     useEffect(() => {
+      console.log('IndoorOutdoor changed:', indoorOutdoor);
       if (placeDetails) {
         console.log('Selected place details:', placeDetails);
         fetchPlaceDetails(placeDetails.place_id);
@@ -62,8 +63,9 @@ function MapScreen({ route }) {
       setLocation(location.coords);
       //fetchNearbyCarParks(location.coords);
       fetchCarParksFromFirebase();
+      
     })();
-  }, [placeDetails , tracksViewChanges]);
+  }, [placeDetails , tracksViewChanges,indoorOutdoor]);
 
   const fetchCarParksFromFirebase = async () => {
     
@@ -85,6 +87,11 @@ function MapScreen({ route }) {
     
   };
 
+  handleIndoorOutdoorChange = (indoorOutdoor) => {
+    // Handle the indoor/outdoor change here
+    console.log("Indoor/Outdoor:", indoorOutdoor);
+  };
+
   const getCarParkAvail = async (accessKey, token, carparkData) => {
     try {
       const url = 'https://www.ura.gov.sg/uraDataService/invokeUraDS?service=Car_Park_Availability';
@@ -98,7 +105,7 @@ function MapScreen({ route }) {
   
       const data = await response.json();
       const carParkDetails = data.Result;
-      console.log('Car park details:', carParkDetails);
+      //console.log('Car park details:', carParkDetails);
       counter = 0
       const updatedCarParksData = carparkData.map((carPark) => {
         let foundCarPark = null;
@@ -219,22 +226,63 @@ function MapScreen({ route }) {
             const eastings = parseFloat(coordinates[0]);
             const northings = parseFloat(coordinates[1]);
             const [longitude, latitude] = proj4(svy21Proj, wgs84Proj, [eastings, northings]);
-            return (
-              <Marker
-                key={carPark.id}
-                coordinate={{
-                  latitude: latitude,
-                  longitude: longitude,
-                }}
-                tracksViewChanges={tracksViewChanges}
-                onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark)}}
-              >
-                <PriceTag price={getPriceTag(carPark)} />
-                <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark)}}>
-                  <CarParkInfo carParkInfo={carPark} />
-                </Callout>
-              </Marker>
-            );
+            if(indoorOutdoor === "Outdoors") {
+              if (carPark.indoor == "N"){
+                return (
+                  <Marker
+                    key={carPark.id}
+                    coordinate={{
+                      latitude: latitude,
+                      longitude: longitude,
+                    }}
+                    tracksViewChanges={tracksViewChanges}
+                    onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark)}}
+                  >
+                    <PriceTag price={getPriceTag(carPark)} />
+                    <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark)}}>
+                      <CarParkInfo carParkInfo={carPark} />
+                    </Callout>
+                  </Marker>
+                );
+              }
+            } else if(indoorOutdoor=== "Indoors"){
+      
+              if (carPark.indoor == "Y"){
+                return (
+                  <Marker
+                    key={carPark.id}
+                    coordinate={{
+                      latitude: latitude,
+                      longitude: longitude,
+                    }}
+                    tracksViewChanges={tracksViewChanges}
+                    onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark)}}
+                  >
+                    <PriceTag price={getPriceTag(carPark)} />
+                    <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark)}}>
+                      <CarParkInfo carParkInfo={carPark} />
+                    </Callout>
+                  </Marker>
+                );
+            }
+            } else {
+              return (
+                <Marker
+                  key={carPark.id}
+                  coordinate={{
+                    latitude: latitude,
+                    longitude: longitude,
+                  }}
+                  tracksViewChanges={tracksViewChanges}
+                  onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark)}}
+                >
+                  <PriceTag price={getPriceTag(carPark)} />
+                  <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark)}}>
+                    <CarParkInfo carParkInfo={carPark} />
+                  </Callout>
+                </Marker>
+              );
+            }
           }
         })}
         </MapView>
