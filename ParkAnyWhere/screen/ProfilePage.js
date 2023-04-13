@@ -4,14 +4,14 @@ import { Card } from "react-native-paper";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-
-import { auth, db , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification} from '../firebaseConfig';
-import { collection, doc, setDoc , query, getDocs} from 'firebase/firestore';
+import { db } from '../firebaseConfig';
+import { collection, doc, setDoc , getDocs } from 'firebase/firestore';
 
 const ProfilePage = ({ navigation }) => {
     const [username, setUsername] = useState([]);
+    const [spent, setSpent] = useState([]);
+    const [service, setService] = useState([]);
+    const [feedback, setFeedback] = useState([]);
     const [carpark, setCarpark] = useState([]);
 
     const getUserFromDB = async () => {
@@ -21,8 +21,27 @@ const ProfilePage = ({ navigation }) => {
             const customersData = customersSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
             setUsername(customersData[0].Username);
             getParkingHistoryFromDB(customersData[0].CustomerID);
+            getFeedbackFromDB(customersData[0].CustomerID)
           } catch (error) {
             console.error('Error fetching users from Firebase:', error);
+          }
+    }
+
+    const getFeedbackFromDB = async (userID) => {
+        try {
+            const feedbackCollection = collection(db, 'Feedback');
+            const feedbackSnapshot = await getDocs(feedbackCollection);
+            const feedbackData = feedbackSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+
+            const feedback = []
+            for (let i=0; i < feedbackData.length; i++) {
+                if (feedbackData[i].CustomerID == userID)
+                    feedback.push(feedbackData[i])
+            }
+
+            setFeedback(feedback.length)
+          } catch (error) {
+            console.error('Error fetching feedback from Firebase:', error);
           }
     }
 
@@ -32,39 +51,92 @@ const ProfilePage = ({ navigation }) => {
             const pHistorySnapshot = await getDocs(pHistoryCollection);
             const pHistoryData = pHistorySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 
-            const carparkIDs = [];
+            const parkingHistory = [];
             for (let i=0; i < pHistoryData.length; i++) {
                 if (pHistoryData[i].CustomerID == userID) {
-                    carparkIDs.push(pHistoryData[i].CarParkID);
+                    const temp = {
+                        'ID': pHistoryData[i].CarParkID,
+                        'DurationParked': (pHistoryData[i].EndDateTime - pHistoryData[i].StartDateTime)/3600
+                    }
+                    parkingHistory.push(temp);
                 }
             }
-            
-            getCarparksFromDB(carparkIDs);
+        
+            getCarparksFromDB(parkingHistory);
           } catch (error) {
             console.error('Error fetching car parks from Firebase:', error);
           }
     }
 
-    const getCarparksFromDB = async (carparkIDs) => {
+    const getCarparksFromDB = async (parkingHistory) => {
         try {
             const carparkCollection = collection(db, 'CarParks');
             const carparkSnapshot = await getDocs(carparkCollection);
-            const carparkData = carparkSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            const carparkData = carparkSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));  
 
-            const carparkNames = [];
-            for (let i=0; i < carparkIDs.length; i++) {
-                // Get the entry from the CarPark database based on its carparkID
-                // Push the carpark name to the carparkNames array
+            const carparkInfos = [];
+            var totalSpent = 0.00;
+            for (let i=0; i < parkingHistory.length; i++) {
+                for (let j=0; j < carparkData.length; j++) {
+                    if (carparkData[j].id == parkingHistory[i].ID) {
+                        let timeStr = calculateTime(parkingHistory[i].DurationParked);
+                        var temp = {
+                            'Name': carparkData[j].ppName,
+                            'Spent': (Number(carparkData[i].weekdayRate.replace(/[^0-9.-]+/g,"")) * parkingHistory[i].DurationParked).toFixed(2),
+                            'Duration': timeStr._j
+                        };
+                        carparkInfos.push(temp);
+                        totalSpent += parseFloat(temp.Spent); 
+                    }
+                }  
             }
             
-            // Use the setCarpark useState for setting the carpark names in the app
-            // Use the carparkNames array to set the names dynamically
+            setCarpark(carparkInfos);
+            setService(carparkInfos.length);
+            setSpent(totalSpent.toFixed(2))
         } catch (error) {
             console.error('Error fetching car parks from Firebase:', error);
         }
     }
 
+    // Convert "time in hours" to "time in hours and mins"
+    const calculateTime = async (DurationParked) => {
+        let hrs = 0;
+        let mins = 0;
+        while (DurationParked > 1) {
+            hrs += 1;
+            DurationParked -= 1;
+        }
+        mins = Math.round(DurationParked * 60);
+        let timeStr = hrs + " Hours " + mins + " Minutes";
+        return timeStr;
+    }
+
     getUserFromDB();
+
+    // Dynamically create the number of carpark cards and populate the content of the cards
+    var dynamicCarparks = [];
+    for (let i=0; i < carpark.length; i++) {
+        dynamicCarparks.push(
+            <Card key={i}>
+                <Card.Content>
+                    <View style={styles.carparkCard}>
+                        <Image 
+                        source={require("../assets/parking-lot.jpg")}
+                        resizeMode="cover"
+                        style={styles.carparkImg}
+                        />
+                        <View style={styles.carparkCardContent}>
+                            <Text style={styles.carparkTitle}>{carpark[i].Name}</Text>
+                            <Text style={styles.carparkCost}>${carpark[i].Spent}</Text>
+                            <Text>{carpark[i].Duration}</Text>
+                        </View>
+                    </View>
+                    
+                </Card.Content>
+            </Card>
+        )
+    }
     
 
     return (
@@ -89,62 +161,25 @@ const ProfilePage = ({ navigation }) => {
                 <Card style={styles.leftCard}>
                     <Card.Content>
                         <Text style={styles.leftCardHeaders}>Total Spent</Text>
-                        <Text style={styles.leftCardValues}>$38.60</Text>  
+                        <Text style={styles.leftCardValues}>${spent}</Text>  
                         <Text style={styles.leftCardHeaders}>Total Service</Text>
-                        <Text style={styles.leftCardValues}>24</Text> 
+                        <Text style={styles.leftCardValues}>{service}</Text> 
                     </Card.Content>
                 </Card>
 
                 <Card style={styles.rightCard}>
                     <Card.Content>
                         <Text style={styles.rightCardHeaders}>Reviews Given</Text>
-                        <Text style={styles.rightCardValues}>10</Text>  
+                        <Text style={styles.rightCardValues}>{feedback}</Text>  
                     </Card.Content>
                 </Card>
             </View>
-            
-
 
             <View style={styles.BookingHistoryView}>
                 <Text style={styles.text}>Booking History</Text>
-                <Card>
-                    <Card.Content>
-                        <View style={styles.carparkCard}>
-                            <Image 
-                            source={require("../assets/681-hg-ave-8-carpark.jpg")}
-                            resizeMode="cover"
-                            style={styles.carparkImg}
-                            />
-                            <View style={styles.carparkCardContent}>
-                                <Text style={styles.carparkTitle}>681 Hougang Ave 8</Text>
-                                <Text style={styles.carparkCost}>$5.60</Text>
-                                <Text>5 Hours 20 Minutes</Text>
-                            </View>
-                        </View>
-                        
-                    </Card.Content>
-                </Card>
-
-                <Card>
-                    <Card.Content>
-                        <View style={styles.carparkCard}>
-                            <Image 
-                            source={require("../assets/serangoon-gardens-carpark.jpg")}
-                            resizeMode="cover"
-                            style={styles.carparkImg}
-                            />
-                            <View style={styles.carparkCardContent}>
-                                <Text style={styles.carparkTitle}>Serangoon Gardens</Text>
-                                <Text style={styles.carparkCost}>$6.10</Text>
-                                <Text>3 Hours 5 Minutes</Text>
-                            </View>
-                        </View>
-                        
-                    </Card.Content>
-                </Card>
-
-                
+                {dynamicCarparks}
             </View>
+
         </View>
         </ImageBackground>
        
