@@ -10,6 +10,7 @@ import {
     KeyboardAwareScrollView,
     TouchableOpacity,
     Button,
+    Modal,
     Dimensions
 } from "react-native";
 import * as Font from 'expo-font';
@@ -18,13 +19,14 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Modal from "react-native-modal";
 import { auth, firestore, createUserWithEmailAndPassword, sendEmailVerification } from '../firebaseConfig';
 
 const SignUpPage = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
     const handleRegister = () => {
         createUserWithEmailAndPassword(auth, email, password)
@@ -32,14 +34,15 @@ const SignUpPage = ({ navigation }) => {
                 // User has been created successfully
                 console.log('User registered successfully', userCredential);
                 sendEmailVerification(auth.currentUser);
+                displayError('User registered successfully');
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'LoginPage' }],
                 })
             })
             .catch((error) => {
+                displayError('Error registering user');
                 console.log('Error registering user', error);
-                setModalVisible(!isModalVisible);
             });
     };
 
@@ -50,10 +53,9 @@ const SignUpPage = ({ navigation }) => {
         })
     };
 
-    const [isModalVisible, setModalVisible] = useState(false);
-
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible);
+    const displayError = (message) => {
+        setModalVisible(true);
+        setErrorMsg(message);
     };
 
   return (
@@ -99,12 +101,6 @@ const SignUpPage = ({ navigation }) => {
               <TouchableOpacity
                 onPress={handleRegister}
                 style={styles.button}>
-                <Modal isVisible={isModalVisible}>
-                    <View style={styles.hide}>
-                       <Text style={styles.text1}>Error with account creation</Text>
-                       <Button title="Back to Log In page" onPress={navToLogin} />
-                     </View>
-                 </Modal>
                 <FeatherIcon name="arrow-right" style={styles.arrow}/>
               </TouchableOpacity>
             </View>
@@ -133,6 +129,24 @@ const SignUpPage = ({ navigation }) => {
             </View>
           </View>
         </View>
+              <Modal
+                  animationType="fade"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={() => setModalVisible(false)}
+              >
+                  <View style={styles.modalContainer}>
+                      <View style={styles.modalContent}>
+                          <Text style={styles.errorText}>{errorMsg}</Text>
+                          <TouchableOpacity
+                              onPress={() => setModalVisible(false)}
+                              style={styles.closeButton}
+                          >
+                              <Text style={styles.closeButtonText}>Close</Text>
+                          </TouchableOpacity>
+                      </View>
+                  </View>
+              </Modal>
       </ImageBackground>
     </View>
   );
@@ -141,6 +155,36 @@ const SignUpPage = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    errorText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#000000',
+        marginBottom: 20,
+    },
+    closeButton: {
+        backgroundColor: '#ED7B7B',
+        borderRadius: 5,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    closeButtonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     text1: {
         textAlign: 'center',
