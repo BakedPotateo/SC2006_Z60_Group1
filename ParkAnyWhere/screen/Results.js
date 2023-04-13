@@ -15,7 +15,7 @@ import proj4 from 'proj4';
 const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs';
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
-function FlatListScreen({ route }) {
+function FlatListScreen({ route , indoorOutdoor , CheckboxChange }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [carParks, setCarParks] = useState([]);
@@ -35,7 +35,7 @@ function FlatListScreen({ route }) {
       setLocation(location.coords);
       fetchCarParksFromFirebase();
     })();
-  }, []);
+  }, [indoorOutdoor, CheckboxChange]);
 
   const fetchCarParksFromFirebase = async () => {
     try {
@@ -47,6 +47,11 @@ function FlatListScreen({ route }) {
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
     }
+  };
+
+  handleIndoorOutdoorChange = (indoorOutdoor) => {
+    // Handle the indoor/outdoor change here
+    console.log("Indoor/Outdoor:", indoorOutdoor);
   };
 
   const getCarParkAvail = async (accessKey, token, carparkData) => {
@@ -94,20 +99,52 @@ function FlatListScreen({ route }) {
     }
   };
 
-      const renderItem = ({ item }) => {
-        if (item.geometries && item.geometries.length > 0 && item.geometries[0].hasOwnProperty("coordinates")  && item.lotsAvailable !== undefined && item.lotsAvailable !== null) {
-          const coordinates = item.geometries[0]["coordinates"].split(',');
-          const eastings = parseFloat(coordinates[0]);
-          const northings = parseFloat(coordinates[1]);
-          const [longitude, latitude] = proj4(svy21Proj, wgs84Proj, [eastings, northings]);
 
+  const renderItem = ({ item }) => {
+    if (
+      item.geometries &&
+      item.geometries.length > 0 &&
+      item.geometries[0].hasOwnProperty("coordinates") &&
+      item.lotsAvailable !== undefined &&
+      item.lotsAvailable !== null
+    ) {
+      const coordinates = item.geometries[0]["coordinates"].split(",");
+      const eastings = parseFloat(coordinates[0]);
+      const northings = parseFloat(coordinates[1]);
+      const [longitude, latitude] = proj4(svy21Proj, wgs84Proj, [
+        eastings,
+        northings,
+      ]);
+  
+      if (CheckboxChange === false && item.electric === "N") {
+        return;
+      } else {
+        if (indoorOutdoor === "Outdoors") {
+          if (item.indoor == "N") {
+            return (
+              <View style={styles.item}>
+                <CarParkInfo carParkInfo={item} />
+              </View>
+            );
+          }
+        } else if (indoorOutdoor === "Indoors") {
+          if (item.indoor == "Y") {
+            return (
+              <View style={styles.item}>
+                <CarParkInfo carParkInfo={item} />
+              </View>
+            );
+          }
+        } else {
           return (
             <View style={styles.item}>
               <CarParkInfo carParkInfo={item} />
             </View>
           );
         }
-      };
+      }
+    }
+  };
       
       return (
         <View style={styles.container}>
