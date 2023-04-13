@@ -99,20 +99,31 @@ function MapScreen({ route }) {
       const data = await response.json();
       const carParkDetails = data.Result;
       console.log('Car park details:', carParkDetails);
-  
+      counter = 0
       const updatedCarParksData = carparkData.map((carPark) => {
-        const foundCarPark = carParkDetails.find(cp => cp.carkparkNo === carPark.carParkNo);
+        let foundCarPark = null;
+        //console.log(counter++);
+        // Iterate through the carParkDetails array to find a matching carPark
+        for (const cp of carParkDetails) {
+          if (cp.carparkNo == carPark.ppCode) {
+            foundCarPark = cp;
+            //console.log(cp.carparkNo);
+            //console.log(carPark.ppCode);
+            break;
+          }
+        }
+  
         if (foundCarPark) {
+          // If found, update car park data by adding available lots
           return {
             ...carPark,
             lotsAvailable: foundCarPark.lotsAvailable,
-            totalLots: foundCarPark.totalLots
           };
         } else {
           return carPark;
         }
       });
-  
+      //console.log('Updated car park data:', updatedCarParksData[0]);
       setCarParks(updatedCarParksData);
     } catch (error) {
       console.error('Error fetching car park details:', error);
@@ -203,7 +214,7 @@ function MapScreen({ route }) {
           />
          {carParks.map((carPark) => {
           // Check if the geometries array is not empty and if the coordinates property exists
-          if (carPark.geometries && carPark.geometries.length > 0 && carPark.geometries[0].hasOwnProperty("coordinates")) {
+          if (carPark.geometries && carPark.geometries.length > 0 && carPark.geometries[0].hasOwnProperty("coordinates") && carPark.lotsAvailable !== undefined && carPark.lotsAvailable !== null) {
             const coordinates = carPark.geometries[0]["coordinates"].split(',');
             const eastings = parseFloat(coordinates[0]);
             const northings = parseFloat(coordinates[1]);
