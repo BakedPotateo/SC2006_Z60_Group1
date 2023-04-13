@@ -6,6 +6,7 @@ import PriceTag from './Views/PriceTag';
 import CarParkInfo from './Views/CarParkInfo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MapViewDirections from 'react-native-maps-directions';
+
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
 //firebase
@@ -23,6 +24,7 @@ function MapScreen({ route }) {
   const [region, setRegion] = useState(null);
   const [marker, setMarker] = useState(null);
   const [location, setLocation] = useState(null);
+  const [destination, setDestination] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null);
   const [carParks, setCarParks] = useState([]);
   const markerRefs = useRef([]);
@@ -30,6 +32,8 @@ function MapScreen({ route }) {
   const mapViewRef = useRef();
   const [tracksViewChanges, setTracksViewChanges] = useState(false);
   const [showDirections, setShowDirections] = useState(false);
+
+  // const destination = {latitude: 1.3397, longitude: 103.7067};
 
   // Get the user's current location and set it as the initial region
     useEffect(() => {
@@ -115,7 +119,22 @@ function MapScreen({ route }) {
     }
   };
   
-
+  function showRoute() {
+    const coordinates = destination.geometries[0]["coordinates"].split(',');
+    const eastings = parseFloat(coordinates[0]);
+    const northings = parseFloat(coordinates[1]);
+    const [longitude, latitude] = proj4(svy21Proj, wgs84Proj, [eastings, northings]);
+    return(  
+      <MapViewDirections
+        origin={location}
+        destination={{latitude: latitude, longitude: longitude}}
+        strokeWidth={3}
+        strokeColor='black'
+        apikey={GOOGLE_MAPS_API_KEY}
+      >
+      </MapViewDirections>    
+  )
+  }
 
   const fetchPlaceDetails = async (placeId) => {
     const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry&key=${GOOGLE_MAPS_API_KEY}`;
@@ -142,9 +161,6 @@ function MapScreen({ route }) {
       console.error('Error fetching place details:', error);
     }
   };
-  
-  
-  
 
   const fetchNearbyCarParks = async ({ latitude, longitude }) => {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1500&type=parking&key=${GOOGLE_MAPS_API_KEY}`;
@@ -163,18 +179,6 @@ function MapScreen({ route }) {
     return carPark["weekdayRate"] + '/hour';
   };
 
-  const displayRouteToCarpark = ({coordinates, location}) => {
-    return (
-      <MapViewDirections
-        origin={location}
-        destination={coordinates}
-        apikey={GOOGLE_MAPS_API_KEY}
-        strokeWidth={3}
-        strokeColor='#ED7B7B'
-      />
-    )
-  }
-
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       {location && (
@@ -188,8 +192,10 @@ function MapScreen({ route }) {
             latitudeDelta: 0.0302,
             longitudeDelta: 0.0302,
           }}
-         
         >
+
+          {showDirections && showRoute()}
+          
           <Marker
             coordinate={{ latitude: location.latitude, longitude: location.longitude }}
             pinColor="blue"
@@ -210,14 +216,12 @@ function MapScreen({ route }) {
                   longitude: longitude,
                 }}
                 tracksViewChanges={tracksViewChanges}
-                // onCalloutPress={setShowDirections(true)}
+                onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark)}}
               >
                 <PriceTag price={getPriceTag(carPark)} />
-                {/* <Callout onPress={setShowDirections(true)}> */}
-                <Callout>
+                <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark)}}>
                   <CarParkInfo carParkInfo={carPark} />
                 </Callout>
-                {/* { showDirections ? displayRouteToCarpark( coordinates, location ) : null} */}
               </Marker>
             );
           }
