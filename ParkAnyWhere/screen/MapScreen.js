@@ -170,15 +170,17 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
       let hoursDiff = (endDate - currDate)/(1000 * 60 * 60);
 
       // print to console
-      // console.log('curr date: ' + currDate.toString());
-      // console.log('end date: ' + endDate.toString());
-      // console.log('selected rate: ' + selectedRate);
-      // console.log('hoursDiff: ' + hoursDiff);
+      console.log('curr date: ' + currDate.toString());
+      console.log('end date: ' + endDate.toString());
+      console.log('selected rate: ' + selectedRate);
+      console.log('hoursDiff: ' + hoursDiff);
 
       setPriceCalculated(true);
       setParkingPrice((selectedRate.replace(/[^0-9.-]+/g,"")*hoursDiff).toFixed(2));
     } else return null;
   }
+
+
 
   const fetchPlaceDetails = async (placeId) => {
     const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry&key=${GOOGLE_MAPS_API_KEY}`;
@@ -258,8 +260,6 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
 
           {showDirections ? showRoute() : null}
           
-          
-
           <Marker
             coordinate={{ latitude: location.latitude, longitude: location.longitude }}
             pinColor="red"
@@ -350,7 +350,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   map: {
-    // position: 'absolute',
     left: 0,
     top: 0,
     width: Dimensions.get('window').width,
