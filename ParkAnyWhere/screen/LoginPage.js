@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
       .then((userCredential) => {
         // Signed in successfully
         const user = userCredential.user;
-        console.log('User logged in successfully', user);
+        console.log('User logged in successfully', user.email);
         //navigation.navigate('TestPage2'); // This is for navigating after logging in
         navigation.reset({
           index: 0,
