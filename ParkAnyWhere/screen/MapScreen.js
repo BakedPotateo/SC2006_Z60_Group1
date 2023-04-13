@@ -185,9 +185,10 @@ function MapScreen({ route }) {
           region={{
             latitude: location.latitude,
             longitude: location.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 0.0302,
+            longitudeDelta: 0.0302,
           }}
+         
         >
           <Marker
             coordinate={{ latitude: location.latitude, longitude: location.longitude }}

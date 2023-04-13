@@ -11,6 +11,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import LoginScreen from './screen/LoginPage.js';
 import SignUpScreen from './screen/SignUpPage.js';
 import MainPage from './screen/MainPage.js'
+import Results from './screen/Results';
 
 //firestore
 import { auth, db , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification} from './firebaseConfig';
@@ -68,6 +69,7 @@ export default function App() {
           <Stack.Screen name="LoginPage" component={LoginScreen} options={{ headerShown: false }} />
           <Stack.Screen name="SignUpPage" component={SignUpScreen} options={{ headerShown: false }} />
           <Stack.Screen name="MainPage" component={MainPage} options={{ headerShown: false }} />
+          <Stack.Screen name="Results" component={Results} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

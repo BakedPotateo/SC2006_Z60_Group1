@@ -10,6 +10,7 @@ import CarParkInfo from './Views/CarParkInfo';
 const GOOGLE_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA'; 
 
 const Results = ({ route }) => {
+  console.log("results page")
   const { searchTerm, location } = route.params;
   const [results, setResults] = useState([]);
 
