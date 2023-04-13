@@ -28,7 +28,7 @@
       navigation.navigate(MapScreenName, { placeDetails: details });
     };
 
-    handleEndDateTimeSelected = (dateTime) => {
+    const handleEndDateTimeSelected = (dateTime) => {
       navigation.navigate(MapScreenName, { endDateTime: dateTime})
     };
 

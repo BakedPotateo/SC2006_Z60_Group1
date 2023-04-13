@@ -35,7 +35,8 @@ function MapScreen({ route , indoorOutdoor}) {
   const mapViewRef = useRef();
   const [tracksViewChanges, setTracksViewChanges] = useState(false);
   const [showDirections, setShowDirections] = useState(false);
-  const [currentDateTime, setCurrentDateTime] = useState(false);
+  const [currentDateTime, setCurrentDateTime] = useState(null);
+  // const [priceCalculated, setPriceCalculated] = useState(false);
   // const [endTime, setEndTime] = useState(null);
 
   // Get the user's current location and set it as the initial region
@@ -157,16 +158,21 @@ function MapScreen({ route , indoorOutdoor}) {
     )
   }
 
-  function calculatePrice() {
-    var date = moment();
-    setCurrentDateTime(date);
-
-    return(
-      <View>
-
-      </View>
-    )
-  }
+  // function calculatePrice() {
+  //   if (!priceCalculated){
+  //     let date = moment();
+  //     date = date.toDate();
+  //     setCurrentDateTime(date);
+  //     console.log(currentDateTime);
+  //     // let hoursDiff = (endDateTime - currentDateTime)/(1000 * 60 * 60);
+  //     let hoursDiff = 7;
+  //     console.log(hoursDiff);
+  //     setPriceCalculated(true);
+  //     return(
+  //       <Text> value: {hoursDiff.toString()} </Text>
+  //     )
+  //   } else return null;
+  // }
 
   const fetchPlaceDetails = async (placeId) => {
     const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry&key=${GOOGLE_MAPS_API_KEY}`;
@@ -227,7 +233,7 @@ function MapScreen({ route , indoorOutdoor}) {
         >
 
           {showDirections && showRoute()}
-          
+
           <Marker
             coordinate={{ latitude: location.latitude, longitude: location.longitude }}
             pinColor="red"
@@ -319,6 +325,23 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
     ...StyleSheet.absoluteFillObject,
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 25,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginBottom: 20,
+    width: '20%',
+    height: 40,
+    backgroundColor: '#ED7B7B',
+    marginLeft: '10%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 3,
   },
 });
 
