@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import PriceTag from './Views/PriceTag';
 import CarParkInfo from './Views/CarParkInfo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import MapViewDirections from 'react-native-maps-directions';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
 //firebase
@@ -12,6 +13,7 @@ import { auth, db , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,
 import { collection, doc, setDoc , query, getDocs} from 'firebase/firestore';
 
 import proj4 from 'proj4';
+import { render } from 'react-dom';
 
 const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs';
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
@@ -27,6 +29,7 @@ function MapScreen({ route }) {
   const placeDetails = route.params?.placeDetails;
   const mapViewRef = useRef();
   const [tracksViewChanges, setTracksViewChanges] = useState(false);
+  const [showDirections, setShowDirections] = useState(false);
 
   // Get the user's current location and set it as the initial region
     useEffect(() => {
@@ -69,7 +72,7 @@ function MapScreen({ route }) {
       //setCarParks(carParksData);
       const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
       //const authToken = getAuthToken(accessKey);
-      getCarParkAvail(accessKey, "u5s--2WMbUA87@4mRecE3P2ax9z36xp8dba-000r-+K1074bsUabYjcX82MbVW-74-ad41990-d0z-Gm28A8kSNXEy7@9c8-Xupd" , carParksData);
+      getCarParkAvail(accessKey, "9fV9TEJ@5cRr8x15434ZF1-30nwvS7CbMh0c015Pk5e2sc712BNfGQFtxcK39v9m72w58C39-fq7Zd165dD2+1-H7d2fuA3T7Kf4" , carParksData);
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
     }
@@ -160,6 +163,18 @@ function MapScreen({ route }) {
     return carPark["weekdayRate"] + '/hour';
   };
 
+  const displayRouteToCarpark = ({coordinates, location}) => {
+    return (
+      <MapViewDirections
+        origin={location}
+        destination={coordinates}
+        apikey={GOOGLE_MAPS_API_KEY}
+        strokeWidth={3}
+        strokeColor='#ED7B7B'
+      />
+    )
+  }
+
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       {location && (
@@ -194,11 +209,14 @@ function MapScreen({ route }) {
                   longitude: longitude,
                 }}
                 tracksViewChanges={tracksViewChanges}
+                // onCalloutPress={setShowDirections(true)}
               >
                 <PriceTag price={getPriceTag(carPark)} />
+                {/* <Callout onPress={setShowDirections(true)}> */}
                 <Callout>
                   <CarParkInfo carParkInfo={carPark} />
                 </Callout>
+                {/* { showDirections ? displayRouteToCarpark( coordinates, location ) : null} */}
               </Marker>
             );
           }
