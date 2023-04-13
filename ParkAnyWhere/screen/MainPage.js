@@ -7,8 +7,10 @@
   import MapScreen from './MapScreen';
   import ProfilePage from './ProfilePage';
   import FeedbackPage from './FeedbackPage'; 
-  import Header from './Components/Header.js';
   import Results from './Results';
+
+  // Components
+  import Header from './Components/Header.js';
 
   //Screen names
   const homeName = "Home";
@@ -23,6 +25,10 @@
 
     const handlePlaceSelected = (details) => {
       navigation.navigate(homeName, { placeDetails: details });
+    };
+
+    const handleEndDateTimeSelected = (dateTime) => {
+      navigation.navigate(homeName, { endDateTime: dateTime})
     };
 
     const toggleView = (isMap) => {
@@ -81,6 +87,7 @@
             <Header
               title="ParkAnyWhere"
               onPlaceSelected={handlePlaceSelected}
+              onEndDateTimeSelected={handleEndDateTimeSelected}
               navigation={navigation}
               onToggleView={toggleView}
             />

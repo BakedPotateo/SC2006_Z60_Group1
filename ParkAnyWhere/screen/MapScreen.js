@@ -6,6 +6,7 @@ import PriceTag from './Views/PriceTag';
 import CarParkInfo from './Views/CarParkInfo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MapViewDirections from 'react-native-maps-directions';
+import moment from 'moment';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
@@ -15,6 +16,7 @@ import { collection, doc, setDoc , query, getDocs} from 'firebase/firestore';
 
 import proj4 from 'proj4';
 import { render } from 'react-dom';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs';
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
@@ -29,11 +31,12 @@ function MapScreen({ route }) {
   const [carParks, setCarParks] = useState([]);
   const markerRefs = useRef([]);
   const placeDetails = route.params?.placeDetails;
+  const endDateTime = route.params?.endDateTime;
   const mapViewRef = useRef();
   const [tracksViewChanges, setTracksViewChanges] = useState(false);
   const [showDirections, setShowDirections] = useState(false);
-
-  // const destination = {latitude: 1.3397, longitude: 103.7067};
+  const [currentDateTime, setCurrentDateTime] = useState(false);
+  // const [endTime, setEndTime] = useState(null);
 
   // Get the user's current location and set it as the initial region
     useEffect(() => {
@@ -139,12 +142,23 @@ function MapScreen({ route }) {
       <MapViewDirections
         origin={location}
         destination={{latitude: latitude, longitude: longitude}}
-        strokeWidth={3}
-        strokeColor='black'
+        strokeWidth={5}
+        strokeColor='#ED7B7B'
         apikey={GOOGLE_MAPS_API_KEY}
       >
       </MapViewDirections>    
-  )
+    )
+  }
+
+  function calculatePrice() {
+    var date = moment();
+    setCurrentDateTime(date);
+
+    return(
+      <View>
+
+      </View>
+    )
   }
 
   const fetchPlaceDetails = async (placeId) => {
@@ -209,7 +223,7 @@ function MapScreen({ route }) {
           
           <Marker
             coordinate={{ latitude: location.latitude, longitude: location.longitude }}
-            pinColor="blue"
+            pinColor="red"
             title="Current Location"
           />
          {carParks.map((carPark) => {

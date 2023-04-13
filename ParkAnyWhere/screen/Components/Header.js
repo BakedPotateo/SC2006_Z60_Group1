@@ -4,13 +4,10 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import {Picker} from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
-import Results from '../Results';
 
 import {
-  GooglePlaceDetail,
   GooglePlacesAutocomplete,
 } from "react-native-google-places-autocomplete";
 
@@ -20,8 +17,7 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: new Date(),
-      time: new Date(),
+      dateTime: new Date(),
       showDatePicker: false,
       showTimePicker: false,
       toggleButtonText: 'Map',
@@ -31,11 +27,17 @@ class Header extends React.Component {
     };
     this.navigation = props.navigation;
     this.onToggleView = props.onToggleView;
+    console.log('DateTime: ' + this.state.dateTime);
   }
 
   handlePlaceSelected(details) {
     // Call the prop passed from MainPage
     this.props.onPlaceSelected(details);
+  }
+
+  handleEndDateTimeSelected() {
+      console.log('New DateTime: ' + this.state.dateTime);
+      // this.props.on
   }
   
   handleToggle = () => {
@@ -60,9 +62,10 @@ class Header extends React.Component {
     this.setState({ showDatePicker: false });
   };
 
-  handleConfirmDate = (event, date) => {
-    if (date) {
-      this.setState({ date, showDatePicker: false });
+  handleConfirmDate = (event, dateTime) => {
+    if (dateTime) {
+      this.setState({ dateTime, showDatePicker: false });
+      this.handleEndDateTimeSelected();
     } else {
       this.hideDatePicker();
     }
@@ -76,9 +79,10 @@ class Header extends React.Component {
     this.setState({ showTimePicker: false });
   };
 
-  handleConfirmTime = (event, time) => {
-    if (time) {
-      this.setState({ time, showTimePicker: false });
+  handleConfirmTime = (event, dateTime) => {
+    if (dateTime) {
+      this.setState({ dateTime, showTimePicker: false });
+      this.handleEndDateTimeSelected();
     } else {
       this.hideTimePicker();
     }
@@ -138,12 +142,12 @@ render() {
             placeholder="Choose date"
             placeholderTextColor="#FFFFFF"
             style={styles.dateInput}
-            value={this.state.date.toLocaleDateString()}
+            value={this.state.dateTime.toLocaleDateString()}
           />
         </TouchableOpacity>
         {this.state.showDatePicker && (
           <DateTimePicker
-            value={this.state.date}
+            value={this.state.dateTime}
             mode="date"
             onChange={this.handleConfirmDate}
             dateFormat='day month year'
@@ -157,16 +161,18 @@ render() {
             placeholder="Choose time"
             placeholderTextColor="#FFFFFF"
             style={styles.timeInput}
-            value={this.state.time.toLocaleTimeString()}
+            value={this.state.dateTime.toLocaleTimeString()}
           />
         </TouchableOpacity>
         {this.state.showTimePicker && (
           <DateTimePicker
-            value={this.state.time}
+            value={this.state.dateTime}
             mode="time"
             onChange={this.handleConfirmTime}
           />
         )}
+
+        
           
         </View>
         </View>
@@ -255,11 +261,11 @@ const styles = StyleSheet.create({
     height: 35,
     backgroundColor: '#ED7B7B',
   },
-  //searchIcon: {
-   // fontSize: 20,
-   // marginRight: 5,
-   // color: '#FFFFFF',
-  //},
+  searchIcon: {
+    fontSize: 20,
+    marginRight: 5,
+    color: '#FFFFFF',
+  },
   searchInput: {
     color: "#FFFFFF",
     flex: 1,
