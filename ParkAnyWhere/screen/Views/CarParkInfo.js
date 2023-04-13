@@ -19,7 +19,6 @@ const CarParkInfo = ({ carParkInfo }) => {
       <Text style={styles.detail}>Weekday Rate: {carParkInfo.weekdayRate}/hour</Text>
       <Text style={styles.detail}>Parking System : {carParkInfo.parkingSystem}</Text>
       <Text style={styles.detail}>Lots Available : {carParkInfo.lotsAvailable}</Text>
-      <Text style={styles.detail}>Total Lots : {carParkInfo.parkCapacity}</Text>
     </View>
   );
 };
