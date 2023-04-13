@@ -163,21 +163,21 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
   }
 
   function displayPrice() {
-    if (!priceCalculated){
+    if (!priceCalculated && endDateTime){
       var endDate = new Date(endDateTime)
       let currDate = moment().toDate();
       setCurrentDateTime(currDate);
       let hoursDiff = (endDate - currDate)/(1000 * 60 * 60);
 
       // print to console
-      console.log('curr date: ' + currDate.toString());
-      console.log('end date: ' + endDate.toString());
-      console.log('selected rate: ' + selectedRate);
-      console.log('hoursDiff: ' + hoursDiff);
+      // console.log('curr date: ' + currDate.toString());
+      // console.log('end date: ' + endDate.toString());
+      // console.log('selected rate: ' + selectedRate);
+      // console.log('hoursDiff: ' + hoursDiff);
 
       setPriceCalculated(true);
       setParkingPrice((selectedRate.replace(/[^0-9.-]+/g,"")*hoursDiff).toFixed(2));
-    } else return null;
+    } else return;
   }
 
 
