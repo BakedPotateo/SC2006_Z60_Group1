@@ -24,7 +24,6 @@ class Header extends React.Component {
     };
     this.navigation = props.navigation;
     this.onToggleView = props.onToggleView;
-    console.log('DateTime: ' + this.state.dateTime);
   }
 
   handlePlaceSelected(details) {
@@ -33,8 +32,8 @@ class Header extends React.Component {
   }
 
   handleEndDateTimeSelected = () => {
-    console.log('New DateTime: ' + this.state.dateTime);
-    this.props.onEndDateTimeSelected(this.state.dateTime);
+    // console.log('New DateTime: ' + this.state.dateTime.toString());
+    this.props.onEndDateTimeSelected(this.state.dateTime.toString());
   }
   
   handleIndoorOutdoorSelection = () => {

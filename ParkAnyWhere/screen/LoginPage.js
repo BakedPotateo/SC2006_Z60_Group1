@@ -184,8 +184,8 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     loremIpsum: {
-        marginTop: '3%',
-        marginBottom: '10%',
+      marginTop: '3%',
+      marginBottom: '10%',
       fontFamily: "roboto-regular",
       color: "#121212",
     },
