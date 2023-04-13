@@ -108,6 +108,10 @@ const ProfilePage = ({ navigation }) => {
             DurationParked -= 1;
         }
         mins = Math.round(DurationParked * 60);
+        if (mins == 60) {
+            mins = 0;
+            hrs++;
+        }
         let timeStr = hrs + " Hours " + mins + " Minutes";
         return timeStr;
     }
