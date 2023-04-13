@@ -52,6 +52,7 @@ class Header extends React.Component {
 
   handleCheckboxChange = () => {
     this.setState((prevState) => ({ checked: !prevState.checked }));
+    this.props.handleCheckboxChange(this.state.checked);
   };
 
 

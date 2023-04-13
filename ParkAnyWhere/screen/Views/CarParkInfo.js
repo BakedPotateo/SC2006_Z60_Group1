@@ -26,6 +26,7 @@ const CarParkInfo = ({ carParkInfo }) => {
       <Text style={styles.detail}>Parking System : {parkingSystem}</Text>
       <Text style={styles.detail}>Lots Available : {carParkInfo.lotsAvailable}</Text>
       <Text style={styles.detail}>Indoor / Outdoor : {indoor}</Text>
+      <Text style={styles.detail}>Electric : {carParkInfo.electric}</Text>
     </View>
   );
 };

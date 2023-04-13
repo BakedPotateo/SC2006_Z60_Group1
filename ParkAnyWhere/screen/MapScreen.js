@@ -22,7 +22,7 @@ const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
 
-function MapScreen({ route , indoorOutdoor}) {
+function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
   const [region, setRegion] = useState(null);
   const [marker, setMarker] = useState(null);
   const [location, setLocation] = useState(null);
@@ -40,8 +40,10 @@ function MapScreen({ route , indoorOutdoor}) {
   // const [endTime, setEndTime] = useState(null);
 
   // Get the user's current location and set it as the initial region
+    // Get the user's current location and set it as the initial region
     useEffect(() => {
-      console.log('IndoorOutdoor changed:', indoorOutdoor);
+      //console.log('IndoorOutdoor changed:', indoorOutdoor);'
+    
       if (placeDetails) {
         console.log('Selected place details:', placeDetails);
         fetchPlaceDetails(placeDetails.place_id);
@@ -50,26 +52,26 @@ function MapScreen({ route , indoorOutdoor}) {
         const timeout = setTimeout(() => {
           setTracksViewChanges(false);
         }, 1000);
-    
+
         return () => clearTimeout(timeout);
       }
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+      (async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied');
+          return;
+        }
 
-      let location = await Location.getCurrentPositionAsync({});
-      //testing AT NTU 1.3484010698533575, 103.68322053068263
-      location.coords.latitude = 1.3484010698533575;
-      location.coords.longitude = 103.68322053068263;
-      setLocation(location.coords);
-      //fetchNearbyCarParks(location.coords);
-      fetchCarParksFromFirebase();
-      
-    })();
-  }, [placeDetails , tracksViewChanges,indoorOutdoor]);
+        let location = await Location.getCurrentPositionAsync({});
+        //testing AT NTU 1.3484010698533575, 103.68322053068263
+        location.coords.latitude = 1.3484010698533575;
+        location.coords.longitude = 103.68322053068263;
+        setLocation(location.coords);
+        //fetchNearbyCarParks(location.coords);
+        fetchCarParksFromFirebase();
+      })();
+    }, [placeDetails, tracksViewChanges, indoorOutdoor , CheckboxChange]);
+
 
   const fetchCarParksFromFirebase = async () => {
     
@@ -82,7 +84,7 @@ function MapScreen({ route , indoorOutdoor}) {
       //setCarParks(carParksData);
       const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
       //const authToken = getAuthToken(accessKey);
-      getCarParkAvail(accessKey, "9fV9TEJ@5cRr8x15434ZF1-30nwvS7CbMh0c015Pk5e2sc712BNfGQFtxcK39v9m72w58C39-fq7Zd165dD2+1-H7d2fuA3T7Kf4" , carParksData);
+      getCarParkAvail(accessKey, "8JauXya9997qWfV8M414U2THbv4-270a7h8@e149dv7BDfZdjQ1gZ313MMVt3d90-s@m43--2b9-fca1f93-s9c1e143mdM7-db9" , carParksData);
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
     }
@@ -246,6 +248,10 @@ function MapScreen({ route , indoorOutdoor}) {
             const eastings = parseFloat(coordinates[0]);
             const northings = parseFloat(coordinates[1]);
             const [longitude, latitude] = proj4(svy21Proj, wgs84Proj, [eastings, northings]);
+            
+            if(CheckboxChange === false && carPark.electric === "N") {
+              return;
+            } else {
             if(indoorOutdoor === "Outdoors") {
               if (carPark.indoor == "N"){
                 return (
@@ -304,6 +310,7 @@ function MapScreen({ route , indoorOutdoor}) {
               );
             }
           }
+        }
         })}
         </MapView>
       )}

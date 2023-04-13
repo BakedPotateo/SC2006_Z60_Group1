@@ -22,6 +22,7 @@
   function MainPage() {
     const [isMapView, setIsMapView] = React.useState(true);
     const [indoorOutdoor, setIndoorOutdoor] = React.useState(null);
+    const [CheckboxChange, setHandleCheckboxChange] = React.useState(null);
     const navigation = useNavigation();
 
     const handlePlaceSelected = (details) => {
@@ -41,6 +42,10 @@
       // Handle the indoor/outdoor change here
       setIndoorOutdoor(indoorOutdoor);
     };
+
+  const handleCheckboxChange = (CheckboxChange) => {
+    setHandleCheckboxChange(CheckboxChange);
+  };
 
     return (
       <Tab.Navigator
@@ -84,17 +89,10 @@
           },
         })}
         >
-          
       
           <Tab.Screen
-            name={MapScreenName}
-            children={(props) => (
-              isMapView ? (
-                <MapScreen {...props} indoorOutdoor={indoorOutdoor} />
-              ) : (
-                <Results {...props} />
-              )
-            )}
+            name={homeName}
+            children={(props) => (isMapView ? <MapScreen {...props} indoorOutdoor={indoorOutdoor} CheckboxChange={CheckboxChange} /> : <Results {...props} />)}
             options={{
               header: () => (
                 <Header
@@ -104,11 +102,11 @@
                   navigation={navigation}
                   onToggleView={toggleView}
                   onIndoorOutdoorChange={handleIndoorOutdoorChange}
+                  handleCheckboxChange={handleCheckboxChange}
                 />
               ),
             }}
           />
-
         <Tab.Screen name={feedbackName} component={FeedbackPage} options={{headerShown: false}}/>
         <Tab.Screen name={profileName} component={ProfilePage} options={{headerShown: false}}/>
       </Tab.Navigator>
