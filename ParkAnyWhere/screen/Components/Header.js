@@ -40,6 +40,10 @@ class Header extends React.Component {
       // this.props.on
   }
   
+  handleIndoorOutdoorSelection = () => {
+    this.props.onIndoorOutdoorChange(this.state.selectedValue);
+  };
+
   handleToggle = () => {
     this.setState((prevState) => ({
       isMapView: !prevState.isMapView,
@@ -201,7 +205,8 @@ render() {
         <Picker
           selectedValue={this.state.selectedValue}
           style={styles.dropdown}
-          onValueChange={(itemValue, itemIndex) => this.setState({ selectedValue: itemValue })}
+          onValueChange={(itemValue, itemIndex) => {this.setState({ selectedValue: itemValue }, this.handleIndoorOutdoorSelection);}}
+          
           prompt="Indoors/Outdoors"
         >
           <Picker.Item label="None" value="None" />
