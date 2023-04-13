@@ -43,7 +43,7 @@ function FlatListScreen({ route }) {
       const carParksSnapshot = await getDocs(carParksCollection);
       const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
-      getCarParkAvail(accessKey, "9fV9TEJ@5cRr8x15434ZF1-30nwvS7CbMh0c015Pk5e2sc712BNfGQFtxcK39v9m72w58C39-fq7Zd165dD2+1-H7d2fuA3T7Kf4", carParksData);
+      getCarParkAvail(accessKey, "8JauXya9997qWfV8M414U2THbv4-270a7h8@e149dv7BDfZdjQ1gZ313MMVt3d90-s@m43--2b9-fca1f93-s9c1e143mdM7-db9", carParksData);
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
     }
