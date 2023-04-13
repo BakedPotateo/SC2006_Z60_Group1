@@ -92,7 +92,7 @@
       
           <Tab.Screen
             name={MapScreenName}
-            children={(props) => (isMapView ? <MapScreen {...props} indoorOutdoor={indoorOutdoor} CheckboxChange={CheckboxChange} /> : <Results {...props} />)}
+            children={(props) => (isMapView ? <MapScreen {...props} indoorOutdoor={indoorOutdoor} CheckboxChange={CheckboxChange} /> : <Results {...props}indoorOutdoor={indoorOutdoor} CheckboxChange={CheckboxChange} />)}
             options={{
               header: () => (
                 <Header
