@@ -13,7 +13,7 @@
   import Header from './Components/Header.js';
 
   //Screen names
-  const homeName = "Home";
+  const MapScreenName = "Home";
   const feedbackName = "Feedback";
   const profileName = "Profile";
 
@@ -25,11 +25,11 @@
     const navigation = useNavigation();
 
     const handlePlaceSelected = (details) => {
-      navigation.navigate(homeName, { placeDetails: details });
+      navigation.navigate(MapScreenName, { placeDetails: details });
     };
 
-    const handleEndDateTimeSelected = (dateTime) => {
-      navigation.navigate(homeName, { endDateTime: dateTime})
+    handleEndDateTimeSelected = (dateTime) => {
+      navigation.navigate(MapScreenName, { endDateTime: dateTime})
     };
 
     const toggleView = (isMap) => {
@@ -37,14 +37,14 @@
     };
 
     
-  handleIndoorOutdoorChange = (indoorOutdoor) => {
-    // Handle the indoor/outdoor change here
-    setIndoorOutdoor(indoorOutdoor);
-  };
+    handleIndoorOutdoorChange = (indoorOutdoor) => {
+      // Handle the indoor/outdoor change here
+      setIndoorOutdoor(indoorOutdoor);
+    };
 
     return (
       <Tab.Navigator
-        initialRouteName={homeName}
+        initialRouteName={MapScreenName}
         screenOptions={({ route }) => ({
           "tabBarActiveTintColor": "#ED7B7B",
           "tabBarInactiveTintColor": "grey",
@@ -69,7 +69,7 @@
             let iconName;
             let rn = route.name;
 
-            if (rn === homeName) {
+            if (rn === MapScreenName) {
               iconName = focused ? 'home' : 'home-outline';
 
             } else if (rn === feedbackName) {
@@ -87,7 +87,7 @@
           
       
           <Tab.Screen
-            name={homeName}
+            name={MapScreenName}
             children={(props) => (
               isMapView ? (
                 <MapScreen {...props} indoorOutdoor={indoorOutdoor} />
@@ -100,7 +100,7 @@
                 <Header
                   title="ParkAnyWhere"
                   onPlaceSelected={handlePlaceSelected}
-              onEndDateTimeSelected={handleEndDateTimeSelected}
+                  onEndDateTimeSelected={handleEndDateTimeSelected}
                   navigation={navigation}
                   onToggleView={toggleView}
                   onIndoorOutdoorChange={handleIndoorOutdoorChange}

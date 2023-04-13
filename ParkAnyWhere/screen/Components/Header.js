@@ -6,10 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
-
-import {
-  GooglePlacesAutocomplete,
-} from "react-native-google-places-autocomplete";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const GOOGLE_PLACES_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
@@ -35,9 +32,9 @@ class Header extends React.Component {
     this.props.onPlaceSelected(details);
   }
 
-  handleEndDateTimeSelected() {
-      console.log('New DateTime: ' + this.state.dateTime);
-      // this.props.on
+  handleEndDateTimeSelected = () => {
+    console.log('New DateTime: ' + this.state.dateTime);
+    this.props.onEndDateTimeSelected(this.state.dateTime);
   }
   
   handleIndoorOutdoorSelection = () => {
