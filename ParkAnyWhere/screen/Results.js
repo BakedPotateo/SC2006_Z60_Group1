@@ -6,8 +6,6 @@ import * as Location from 'expo-location';
 import CarParkInfo from './Views/CarParkInfo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-
-
 // firebase
 import { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification } from '../firebaseConfig';
 import { collection, doc, setDoc, query, getDocs } from 'firebase/firestore';
@@ -29,69 +27,27 @@ function FlatListScreen({ route }) {
         setErrorMsg('Permission to access location was denied');
         return;
       }
-  
-      if (route.params && route.params.selectedLocation) {
-        setLocation({
-          latitude: route.params.selectedLocation.lat,
-          longitude: route.params.selectedLocation.lng,
-        });
-        fetchCarParksFromFirebase();
-      } else {
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location.coords);
-        fetchCarParksFromFirebase(location.coords);
-      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      //testing AT NTU 1.3484010698533575, 103.68322053068263
+      location.coords.latitude = 1.3484010698533575;
+      location.coords.longitude = 103.68322053068263;
+      setLocation(location.coords);
+      fetchCarParksFromFirebase();
     })();
-  }, [route.params]);
-  
-  
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of the Earth in km
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; // Distance in km
-    return d;
-  };
-  
-  const deg2rad = (deg) => {
-    return deg * (Math.PI / 180);
-  };
-  
-  const fetchCarParksFromFirebase = async (location) => {
+  }, []);
+
+  const fetchCarParksFromFirebase = async () => {
     try {
       const carParksCollection = collection(db, 'CarParks');
       const carParksSnapshot = await getDocs(carParksCollection);
-      let carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-      
-      // Filter car parks based on distance
-      carParksData = carParksData.filter(carPark => {
-        if (carPark.geometries && carPark.geometries.length > 0 && carPark.geometries[0].hasOwnProperty("coordinates")) {
-          const coordinates = carPark.geometries[0]["coordinates"].split(',');
-          const eastings = parseFloat(coordinates[0]);
-          const northings = parseFloat(coordinates[1]);
-          const [longitude, latitude] = proj4(svy21Proj, wgs84Proj, [eastings, northings]);
-  
-          // Calculate the distance in km
-          const distance = calculateDistance(location.latitude, location.longitude, latitude, longitude);
-  
-          // Return true if the distance is within 5km
-          return distance <= 5;
-        }
-        return false;
-      });
-  
+      const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
       getCarParkAvail(accessKey, "9fV9TEJ@5cRr8x15434ZF1-30nwvS7CbMh0c015Pk5e2sc712BNfGQFtxcK39v9m72w58C39-fq7Zd165dD2+1-H7d2fuA3T7Kf4", carParksData);
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
     }
   };
-  
-  
 
   const getCarParkAvail = async (accessKey, token, carparkData) => {
     try {
@@ -121,7 +77,7 @@ function FlatListScreen({ route }) {
         }
       });
   
-      setCarParks(updatedCarParksData, location);
+      setCarParks(updatedCarParksData);
     } catch (error) {
       console.error('Error fetching car park details:', error);
     }
@@ -169,5 +125,4 @@ function FlatListScreen({ route }) {
     });
 
     export default FlatListScreen;
-
 
