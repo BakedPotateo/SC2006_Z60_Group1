@@ -65,12 +65,23 @@ function FlatListScreen({ route }) {
       console.log('Car park details:', carParkDetails);
   
       const updatedCarParksData = carparkData.map((carPark) => {
-        const foundCarPark = carParkDetails.find(cp => cp.carkparkNo === carPark.carParkNo);
+        let foundCarPark = null;
+        //console.log(counter++);
+        // Iterate through the carParkDetails array to find a matching carPark
+        for (const cp of carParkDetails) {
+          if (cp.carparkNo == carPark.ppCode) {
+            foundCarPark = cp;
+            //console.log(cp.carparkNo);
+            //console.log(carPark.ppCode);
+            break;
+          }
+        }
+  
         if (foundCarPark) {
+          // If found, update car park data by adding available lots
           return {
             ...carPark,
             lotsAvailable: foundCarPark.lotsAvailable,
-            totalLots: foundCarPark.totalLots
           };
         } else {
           return carPark;
@@ -84,7 +95,7 @@ function FlatListScreen({ route }) {
   };
 
       const renderItem = ({ item }) => {
-        if (item.geometries && item.geometries.length > 0 && item.geometries[0].hasOwnProperty("coordinates")) {
+        if (item.geometries && item.geometries.length > 0 && item.geometries[0].hasOwnProperty("coordinates")  && item.lotsAvailable !== undefined && item.lotsAvailable !== null) {
           const coordinates = item.geometries[0]["coordinates"].split(',');
           const eastings = parseFloat(coordinates[0]);
           const northings = parseFloat(coordinates[1]);
