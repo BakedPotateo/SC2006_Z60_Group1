@@ -19,16 +19,43 @@ import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { auth, firestore, createUserWithEmailAndPassword, sendEmailVerification } from '../firebaseConfig';
+import { auth, createUserWithEmailAndPassword, sendEmailVerification, db } from '../firebaseConfig';
+import { collection, doc, setDoc} from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const SignUpPage = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
 
-    const handleRegister = () => {
+    const getRandomInt = (min, max) => {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    const handleRegister = async () => {
+        const customerId = getRandomInt(1, 999);
+        const customerData = {
+            CustomerID: customerId,
+            Username: String(username),
+            Email: String(email)
+        };
+        const customersCollection = collection(db, 'Customers');
+        const customerDoc = doc(customersCollection);
+
+        // Add a new document with a generated ID to the "users" collection
+        try {
+            await setDoc(customerDoc, customerData);
+            console.log('Car park details saved to Firestore');
+        } catch (error) {
+            console.error('Error saving car park details to Firestore:', error);
+        };
+
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // User has been created successfully
@@ -73,8 +100,8 @@ const SignUpPage = ({ navigation }) => {
             <FeatherIcon name="user" style={styles.icon8}></FeatherIcon>
             <TextInput
               placeholder="Username"
-              value={email}
-              onChangeText={setEmail}
+              value={username}
+              onChangeText={setUsername}
               style={styles.placeholder2}
             ></TextInput>
           </View>
@@ -89,9 +116,11 @@ const SignUpPage = ({ navigation }) => {
             ></TextInput>
           </View>
           <View style={styles.icon4Row}>
-            <EntypoIcon name="mobile" style={styles.icon4}></EntypoIcon>
+            <EntypoIcon name="email" style={styles.icon4}></EntypoIcon>
             <TextInput
-              placeholder="Mobile"
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
               style={styles.textInput}
             ></TextInput>
           </View>
