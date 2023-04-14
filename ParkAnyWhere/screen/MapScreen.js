@@ -15,8 +15,6 @@ const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 import { db } from '../firebaseConfig';
 import { collection, getDocs} from 'firebase/firestore';
 
-
-
 const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs';
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
@@ -79,11 +77,11 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
       const carParksSnapshot = await getDocs(carParksCollection);
       const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       //print out the data
-      //console.log(carParksData);
-      //setCarParks(carParksData);
+      console.log(carParksData);
+      setCarParks(carParksData);
       const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
-      //const authToken = getAuthToken(accessKey);
-      getCarParkAvail(accessKey, "8JauXya9997qWfV8M414U2THbv4-270a7h8@e149dv7BDfZdjQ1gZ313MMVt3d90-s@m43--2b9-fca1f93-s9c1e143mdM7-db9" , carParksData);
+      const authToken =  await getAuthToken(accessKey);
+      getCarParkAvail(accessKey, authToken , carParksData);
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
     }

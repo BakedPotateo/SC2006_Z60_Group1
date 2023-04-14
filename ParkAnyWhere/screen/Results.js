@@ -1,5 +1,4 @@
 // Results.js
-
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import * as Location from 'expo-location';
@@ -41,7 +40,7 @@ function FlatListScreen({ route , indoorOutdoor , CheckboxChange }) {
       const carParksCollection = collection(db, 'CarParks');
       const carParksSnapshot = await getDocs(carParksCollection);
       const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-      const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
+      const accessKey = 'AIzaSyC2G3gaQdkFGRz4-6xefA7UmfGOYtfPdK8';
       getCarParkAvail(accessKey, "8JauXya9997qWfV8M414U2THbv4-270a7h8@e149dv7BDfZdjQ1gZ313MMVt3d90-s@m43--2b9-fca1f93-s9c1e143mdM7-db9", carParksData);
     } catch (error) {
       console.error('Error fetching car parks from Firebase:', error);
