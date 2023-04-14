@@ -1,27 +1,19 @@
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 import {
     StyleSheet,
     View,
-    StatusBar,
-    Image,
     ImageBackground,
     Text,
     TextInput,
-    KeyboardAwareScrollView,
     TouchableOpacity,
-    Button,
     Modal,
     Dimensions
 } from "react-native";
-import * as Font from 'expo-font';
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import EntypoIcon from "react-native-vector-icons/Entypo";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { auth, createUserWithEmailAndPassword, sendEmailVerification, db } from '../firebaseConfig';
 import { collection, doc, setDoc} from 'firebase/firestore';
-import { v4 as uuidv4 } from 'uuid';
 
 
 const SignUpPage = ({ navigation }) => {
@@ -71,13 +63,6 @@ const SignUpPage = ({ navigation }) => {
                 displayError('Error registering user');
                 console.log('Error registering user', error);
             });
-    };
-
-    const navToLogin = () => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'LoginPage' }],
-        })
     };
 
     const displayError = (message) => {
