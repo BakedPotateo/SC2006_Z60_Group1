@@ -65,13 +65,6 @@ const SignUpPage = ({ navigation }) => {
             });
     };
 
-    const navToLogin = () => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'LoginPage' }],
-        })
-    };
-
     const displayError = (message) => {
         setModalVisible(true);
         setErrorMsg(message);
