@@ -1,14 +1,13 @@
 // Results.js
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import * as Location from 'expo-location';
 import CarParkInfo from './Views/CarParkInfo';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 // firebase
-import { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification } from '../firebaseConfig';
-import { collection, doc, setDoc, query, getDocs } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 
 import proj4 from 'proj4';
 

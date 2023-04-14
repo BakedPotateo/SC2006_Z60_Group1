@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Image, ImageBackground, Dimensions } from "react-native";
 import { Card } from "react-native-paper";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 import { db } from '../firebaseConfig';
-import { collection, doc, setDoc , getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 
 const ProfilePage = ({ navigation }) => {
     const [username, setUsername] = useState([]);

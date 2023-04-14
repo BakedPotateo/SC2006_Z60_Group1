@@ -7,17 +7,15 @@ import CarParkInfo from './Views/CarParkInfo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MapViewDirections from 'react-native-maps-directions';
 import moment from 'moment';
+import proj4 from 'proj4';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
 //firebase
-import { auth, db , signInWithEmailAndPassword ,createUserWithEmailAndPassword ,sendEmailVerification} from '../firebaseConfig';
-import { collection, doc, setDoc , query, getDocs} from 'firebase/firestore';
+import { db } from '../firebaseConfig';
+import { collection, getDocs} from 'firebase/firestore';
 
-import proj4 from 'proj4';
-import { render } from 'react-dom';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Button } from 'react-native-paper';
+
 
 const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs';
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
@@ -36,7 +34,6 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
   const mapViewRef = useRef();
   const [tracksViewChanges, setTracksViewChanges] = useState(false);
   const [showDirections, setShowDirections] = useState(false);
-  const [currentDateTime, setCurrentDateTime] = useState(null);
   const [priceCalculated, setPriceCalculated] = useState(false);
   const [parkingPrice, setParkingPrice] = useState(0);
   const [selectedRate, setSelectedRate] = useState(0);
