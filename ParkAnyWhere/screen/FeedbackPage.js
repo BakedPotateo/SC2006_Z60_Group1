@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground, Dimensions } from "react-native";
 import StarRating from "react-native-star-rating-widget";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -114,62 +114,60 @@ const FeedbackForm = ({}) => {
 
 
   return (
-    <View style={styles.container}>
-
-      <ImageBackground
+    <ImageBackground
         source={require("../assets/LoginBG.png")}
         resizeMode={"stretch"}
         style={styles.backgroundImage}
         imageStyle={styles.imageBG}
-      ></ImageBackground>
-
-      <View style={styles.content}></View>
-
-      <Text style={styles.header}>What's Up</Text>
-
-      {carParks.length > 0 ? (
-        <DropDownPicker
-          style={styles.dropDown}
-          open={dropDownOpen}
-          setOpen={setDropDownOpen}
-          value={selectedCarPark}
-          setValue={setSelectedCarPark}
-          items={carParks}
-          setItems={setCarParks}
-          containerStyle={{ height: 40, width: '50%' }}
-          
-          itemStyle={{
-            justifyContent: 'flex-start',
-          }}
-          dropDownStyle={{ backgroundColor: '#fafafa' }}
-          onChangeItem={(item) => setSelectedCarPark(item.value)}
-        />
-      ) : (
-        <Text>No parking history found.</Text>
-      )}
-
-      <StarRating
-      style={styles.rating} 
-      rating={rating} 
-      onChange={setRating} 
-      />
-
-      <TextInput
-        style={styles.reviewInput}
-        multiline
-        onChangeText={setComment}
-        value={comment}
-        placeholder="Tell us about it"
-      />
-
-      <Pressable 
-      style={styles.button}
-      onPress={handleSubmit}
       >
-        <Text style={styles.buttonText}>Submit</Text>         
-      </Pressable>
+      <View style={styles.container}>
+        <View style={styles.content}></View>
+        <Text style={styles.header}>What's Up</Text>
 
-    </View>
+        {carParks.length > 0 ? (
+          <DropDownPicker
+            style={styles.dropDown}
+            open={dropDownOpen}
+            setOpen={setDropDownOpen}
+            value={selectedCarPark}
+            setValue={setSelectedCarPark}
+            items={carParks}
+            setItems={setCarParks}
+            containerStyle={{ height: 40, width: '50%' }}
+            
+            itemStyle={{
+              justifyContent: 'flex-start',
+            }}
+            dropDownStyle={{ backgroundColor: '#fafafa' }}
+            onChangeItem={(item) => setSelectedCarPark(item.value)}
+          />
+        ) : (
+          <Text>No parking history found.</Text>
+        )}
+
+        <StarRating
+        style={styles.rating} 
+        rating={rating} 
+        onChange={setRating} 
+        />
+
+        <TextInput
+          style={styles.reviewInput}
+          multiline
+          onChangeText={setComment}
+          value={comment}
+          placeholder="Tell us about it"
+        />
+
+        <Pressable 
+        style={styles.button}
+        onPress={handleSubmit}
+        >
+          <Text style={styles.buttonText}>Submit</Text>         
+        </Pressable>
+
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -202,7 +200,7 @@ const styles = StyleSheet.create({
   },
 
   rating:{
-    marginTop: "35%"
+    marginTop: "10%",
   },
 
   reviewInput: {
@@ -212,6 +210,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
+    textAlignVertical: 'top'
   },
 
   button: {
@@ -231,6 +230,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: "#fff",
+  },
+  backgroundImage: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 
