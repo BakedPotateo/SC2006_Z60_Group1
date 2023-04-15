@@ -160,7 +160,6 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
   }
 
   const makeTrip = async (event) => {
-    console.log('makeTrip: ')
     if (priceCalculated && destinationSelected) {
       try{
         const pHistoryCollection = collection(db, 'ParkingHistory');
@@ -171,7 +170,6 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
           EndDateTime: new Date(endDateTime),
           StartDateTime: currentDateTime,
         };
-        console.log(destination["id"]);
         await addDoc(pHistoryCollection, newPHistoryObject)
       }catch(error){
         console.log(`Error submitting trip for ${destination["id"]}`);
