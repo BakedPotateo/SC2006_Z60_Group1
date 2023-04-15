@@ -15,7 +15,6 @@ import Results from './screen/Results';
 const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
 
-
 export default function App() {
   const [appIsReady, setAppIsReady] = React.useState(false);
 
