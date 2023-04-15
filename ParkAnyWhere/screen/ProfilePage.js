@@ -134,7 +134,6 @@ const ProfilePage = ({ navigation }) => {
                             <Text>{carpark[i].Duration}</Text>
                         </View>
                     </View>
-                    
                 </Card.Content>
             </Card>
         )
@@ -219,6 +218,7 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 24,
       fontWeight: 'bold',
+      paddingLeft: '5%'
     },
     cardsView: {
         flexDirection: "row",

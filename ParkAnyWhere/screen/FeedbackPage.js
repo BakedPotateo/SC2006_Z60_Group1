@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground, Dimensions } from "react-native";
 import StarRating from "react-native-star-rating-widget";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -117,62 +117,60 @@ const FeedbackForm = ({}) => {
 
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require("../assets/LoginBG.png")}
+      resizeMode={"stretch"}
+      style={styles.backgroundImage}
+      imageStyle={styles.imageBG}
+    >
+      <View style={styles.container}>
+        <View style={styles.content}></View>
+          <Text style={styles.header}>What's Up</Text>
 
-      <ImageBackground
-        source={require("../assets/LoginBG.png")}
-        resizeMode={"stretch"}
-        style={styles.backgroundImage}
-        imageStyle={styles.imageBG}
-      ></ImageBackground>
+        {carParks.length > 0 ? (
+          <DropDownPicker
+            style={styles.dropDown}
+            open={dropDownOpen}
+            setOpen={setDropDownOpen}
+            value={selectedCarPark}
+            setValue={setSelectedCarPark}
+            items={carParks}
+            setItems={setCarParks}
+            containerStyle={{ height: 40, width: '50%' }}
+            
+            itemStyle={{
+              justifyContent: 'flex-start',
+            }}
+            dropDownStyle={{ backgroundColor: '#fafafa' }}
+            onChangeItem={(item) => setSelectedCarPark(item.value)}
+          />
+        ) : (
+          <Text>Loading car parks...</Text>
+        )}
 
-      <View style={styles.content}></View>
+          <StarRating
+            style={styles.rating} 
+            rating={rating} 
+            onChange={setRating} 
+          />
 
-      <Text style={styles.header}>What's Up</Text>
+          <TextInput
+            style={styles.reviewInput}
+            multiline
+            onChangeText={setComment}
+            value={comment}
+            placeholder="Tell us about it"
+          />
 
-      {carParks.length > 0 ? (
-        <DropDownPicker
-          style={styles.dropDown}
-          open={dropDownOpen}
-          setOpen={setDropDownOpen}
-          value={selectedCarPark}
-          setValue={setSelectedCarPark}
-          items={carParks}
-          setItems={setCarParks}
-          containerStyle={{ height: 40, width: '50%' }}
-          
-          itemStyle={{
-            justifyContent: 'flex-start',
-          }}
-          dropDownStyle={{ backgroundColor: '#fafafa' }}
-          onChangeItem={(item) => setSelectedCarPark(item.value)}
-        />
-      ) : (
-        <Text>Loading car parks...</Text>
-      )}
+          <Pressable 
+            style={styles.button}
+            onPress={handleSubmit}
+          >
+            <Text style={styles.buttonText}>Submit</Text>         
+          </Pressable>
 
-      <StarRating
-      style={styles.rating} 
-      rating={rating} 
-      onChange={setRating} 
-      />
-
-      <TextInput
-        style={styles.reviewInput}
-        multiline
-        onChangeText={setComment}
-        value={comment}
-        placeholder="Tell us about it"
-      />
-
-      <Pressable 
-      style={styles.button}
-      onPress={handleSubmit}
-      >
-        <Text style={styles.buttonText}>Submit</Text>         
-      </Pressable>
-
-    </View>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -201,20 +199,24 @@ const styles = StyleSheet.create({
     marginTop: "7%",
     marginLeft: "0%",
     marginRight: "0%",
-    marginBottom: "30%"
+    marginBottom: "30%",
+    zIndex: 2,
   },
 
   rating:{
-    marginTop: "35%"
+    marginTop: "10%",
+    zIndex: -1,
   },
 
   reviewInput: {
     height: "30%",
     width: "50%",
     margin: "7%",
+    textAlignVertical: 'top',
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
+    zIndex: -1,
   },
 
   button: {
@@ -234,6 +236,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: "#fff",
+  },
+  backgroundImage: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 

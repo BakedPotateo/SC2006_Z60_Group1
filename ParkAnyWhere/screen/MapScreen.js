@@ -13,7 +13,7 @@ const GOOGLE_MAPS_API_KEY = 'AIzaSyAk_IKcK278tmdzZEsggIpAwGkipdxiCOA';
 
 //firebase
 import { db } from '../firebaseConfig';
-import { collection, getDocs} from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const svy21Proj = '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs';
 const wgs84Proj = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
@@ -29,12 +29,14 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
   const markerRefs = useRef([]);
   const placeDetails = route.params?.placeDetails;
   const endDateTime = route.params?.endDateTime;
+  const [currentDateTime, setCurrentDateTime] = useState(null);
   const mapViewRef = useRef();
   const [tracksViewChanges, setTracksViewChanges] = useState(false);
   const [showDirections, setShowDirections] = useState(false);
   const [priceCalculated, setPriceCalculated] = useState(false);
   const [parkingPrice, setParkingPrice] = useState(0);
   const [selectedRate, setSelectedRate] = useState(0);
+  const [destinationSelected, setDestinationSelected] = useState(false);
 
   // Get the user's current location and set it as the initial region
     // Get the user's current location and set it as the initial region
@@ -157,6 +159,28 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
     )
   }
 
+  const makeTrip = async (event) => {
+    console.log('makeTrip: ')
+    if (priceCalculated && destinationSelected) {
+      try{
+        const pHistoryCollection = collection(db, 'ParkingHistory');
+        newPHistoryObject = {
+          CarParkID: destination["id"],
+          CustomerID: 1,
+          Email: "test@gmail.com",
+          EndDateTime: new Date(endDateTime),
+          StartDateTime: currentDateTime,
+        };
+        console.log(destination["id"]);
+        await addDoc(pHistoryCollection, newPHistoryObject)
+      }catch(error){
+        console.log(`Error submitting trip for ${destination["id"]}`);
+      }finally{
+          console.log(`Trip for ${destination["id"]} submitted successfully!`);
+      }
+    }
+  };
+
   function displayPrice() {
     if (!priceCalculated && endDateTime){
       var endDate = new Date(endDateTime)
@@ -227,12 +251,21 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
           onPress={ () => { 
             setShowDirections(false);
             setPriceCalculated(false); 
+            setDestinationSelected(false);
             setParkingPrice(0);
             setSelectedRate(0)}
           } 
-          style={styles.buttonContainer}
+          style={styles.button}
         >
           <Text style={styles.priceFont}> Reset </Text>
+        </Pressable>
+        <Pressable
+          onPress={ () => { 
+            makeTrip()
+          }}
+          style={styles.letsGoButton}
+        >
+          <Text style={styles.priceFont}> Let's go! </Text>
         </Pressable>
         <View style={styles.priceContainer}>
           <Text style={styles.priceFont}> Price: ${parkingPrice} </Text>
@@ -281,10 +314,10 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
                       longitude: longitude,
                     }}
                     tracksViewChanges={tracksViewChanges}
-                    onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"])}}
+                    onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"]) ; setDestinationSelected(true)}}
                   >
                     <PriceTag price={getPriceTag(carPark)} />
-                    <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"])}}>
+                    <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"]) ; setDestinationSelected(true)}}>
                       <CarParkInfo carParkInfo={carPark} />
                     </Callout>
                   </Marker>
@@ -301,10 +334,10 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
                       longitude: longitude,
                     }}
                     tracksViewChanges={tracksViewChanges}
-                    onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"])}}
+                    onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"]) ; setDestinationSelected(true)}}
                   >
                     <PriceTag price={getPriceTag(carPark)} />
-                    <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"])}}>
+                    <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"]) ; setDestinationSelected(true)}}>
                       <CarParkInfo carParkInfo={carPark} />
                     </Callout>
                   </Marker>
@@ -319,10 +352,10 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
                     longitude: longitude,
                   }}
                   tracksViewChanges={tracksViewChanges}
-                  onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark.weekdayRate)}}
+                  onCalloutPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"]) ; setDestinationSelected(true)}}
                 >
                   <PriceTag price={getPriceTag(carPark)} />
-                  <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark.weekdayRate)}}>
+                  <Callout onPress={() => {setShowDirections(true) ; setDestination(carPark) ; setSelectedRate(carPark["weekdayRate"]) ; setDestinationSelected(true)}}>
                     <CarParkInfo carParkInfo={carPark} />
                   </Callout>
                 </Marker>
@@ -353,7 +386,7 @@ const styles = StyleSheet.create({
   },
   priceContainer: {
     position: 'absolute',
-    marginLeft: '60%',
+    marginLeft: '65%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -373,7 +406,7 @@ const styles = StyleSheet.create({
     fontFamily: "roboto-regular",
     color: "#ffffff",
   },
-  buttonContainer: {
+  button: {
     position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
@@ -396,6 +429,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     zIndex: 2,
     width: '80%',
+  },
+  letsGoButton: {
+    position: 'absolute',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: '30%',
+    borderRadius: 25,
+    paddingLeft: 10,
+    paddingRight: 10,
+    width: '15%',
+    height: 30,
+    backgroundColor: '#ED7B7B',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 3,
   },
 });
 
