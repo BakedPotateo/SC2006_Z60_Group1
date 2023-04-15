@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground } from "r
 import StarRating from "react-native-star-rating-widget";
 import DropDownPicker from "react-native-dropdown-picker";
 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from '../firebaseConfig';
 import { collection, doc , getDocs , addDoc, updateDoc , query, where} from 'firebase/firestore';
 
@@ -13,8 +14,8 @@ const FeedbackForm = ({}) => {
   const [carParks, setCarParks] = useState([]);
   const [selectedCarPark, setSelectedCarPark] = useState('');
   
-  //Hardcode CustomerID as 1
-  const customerID = 1;
+  const customerID=1;
+  console.log(`CustomerID is ${customerID}`);
 
   useEffect(() => {
     const fetchCarParks = async () => {
@@ -25,23 +26,19 @@ const FeedbackForm = ({}) => {
         const parkingHistoryCollection = collection(db, 'ParkingHistory');
         const parkingHistorySnapshot = await getDocs(query(parkingHistoryCollection, where('CustomerID', '==', customerID)));
         const parkingHistoryData = parkingHistorySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        for (let i=0; i < parkingHistoryData.length; i++) {
-          let temp = parkingHistoryData[i].CarParkID;
+        for (let parkingHistElement of parkingHistoryData) {
+          let temp = parkingHistElement.CarParkID;
           parkingHistory.push(temp);
-          //console.log(`CarParkID: ${parkingHistory[i]}`);
         }
         const carParksCollection = collection(db, 'CarParks');
         const carParksSnapshot = await getDocs(query(carParksCollection, where('ppCode', 'in', parkingHistory)));
         const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        //console.log(`Length of carParksData ${carParksData.length}`)
 
-        for (let i=0; i < carParksData.length; i++) {
-          for(let j=0; j < parkingHistory.length; j++){
-            if(carParksData[i].ppCode == parkingHistory[j]){
-              let temp = {label:(carParksData[i].ppName), value:(parkingHistory[j])}
+        for (let carParkElement of carParksData) {
+          for(let parkingHistElement of parkingHistory){
+            if(carParkElement.ppCode == parkingHistElement){
+              let temp = {label:(carParkElement.ppName), value:(parkingHistory[j])}
               carParksList.push(temp);
-              //console.log(carParksData[i].ppCode, parkingHistory[j]);
-              //console.log(temp);
             }
           }
         }
@@ -148,7 +145,7 @@ const FeedbackForm = ({}) => {
           onChangeItem={(item) => setSelectedCarPark(item.value)}
         />
       ) : (
-        <Text>Loading car parks...</Text>
+        <Text>No parking history found.</Text>
       )}
 
       <StarRating
