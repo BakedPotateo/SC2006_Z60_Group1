@@ -136,46 +136,43 @@ render() {
             </TouchableOpacity>
           </View>
           <View style={styles.dateTimeContainer}>
-          <TouchableOpacity onPress={this.showDatePicker}>
-          <MaterialIcons name="event" style={{ position: 'absolute', marginLeft: 5, zIndex: 1, top:2 ,fontSize: 20, color: '#FFFFFF'}} />
-          <TextInput
-            editable={false}
-            placeholder="Choose date"
-            placeholderTextColor="#FFFFFF"
-            style={styles.dateInput}
-            value={this.state.dateTime.toLocaleDateString()}
-          />
-        </TouchableOpacity>
-        {this.state.showDatePicker && (
-          <DateTimePicker
-            value={this.state.dateTime}
-            mode="date"
-            onChange={this.handleConfirmDate}
-            dateFormat='day month year'
-          />
-        )}
+            <TouchableOpacity onPress={this.showDatePicker}>
+              <MaterialIcons name="event" style={{ position: 'absolute', marginLeft: 5, zIndex: 1, top:2 ,fontSize: 20, color: '#FFFFFF'}} />
+              <TextInput
+                editable={false}
+                placeholder="Choose date"
+                placeholderTextColor="#FFFFFF"
+                style={styles.dateInput}
+                value={this.state.dateTime.toLocaleDateString()}
+              />
+            </TouchableOpacity>
+            {this.state.showDatePicker && (
+              <DateTimePicker
+                value={this.state.dateTime}
+                mode="date"
+                onChange={this.handleConfirmDate}
+                dateFormat='day month year'
+              />
+            )}
 
-        <TouchableOpacity onPress={this.showTimePicker}>
-          <MaterialIcons name="access-time" style={{ position: 'absolute', marginLeft: 5, zIndex: 1, top:2, fontSize: 20, color: '#FFFFFF' }} />
-          <TextInput
-            editable={false}
-            placeholder="Choose time"
-            placeholderTextColor="#FFFFFF"
-            style={styles.timeInput}
-            value={this.state.dateTime.toLocaleTimeString()}
-          />
-        </TouchableOpacity>
-        {this.state.showTimePicker && (
-          <DateTimePicker
-            value={this.state.dateTime}
-            mode="time"
-            onChange={this.handleConfirmTime}
-          />
-        )}
-
-        
-          
-        </View>
+            <TouchableOpacity onPress={this.showTimePicker}>
+              <MaterialIcons name="access-time" style={{ position: 'absolute', marginLeft: 5, zIndex: 1, top:2, fontSize: 20, color: '#FFFFFF' }} />
+              <TextInput
+                editable={false}
+                placeholder="Choose time"
+                placeholderTextColor="#FFFFFF"
+                style={styles.timeInput}
+                value={this.state.dateTime.toLocaleTimeString()}
+              />
+            </TouchableOpacity>
+            {this.state.showTimePicker && (
+              <DateTimePicker
+                value={this.state.dateTime}
+                mode="time"
+                onChange={this.handleConfirmTime}
+              />
+            )}
+          </View>
         </View>
       </ImageBackground>
 
