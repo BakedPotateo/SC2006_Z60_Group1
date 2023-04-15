@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground, Dimensions } from "react-native";
+import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground } from "react-native";
 import StarRating from "react-native-star-rating-widget";
 import DropDownPicker from "react-native-dropdown-picker";
 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from '../firebaseConfig';
 import { collection, doc , getDocs , addDoc, updateDoc , query, where} from 'firebase/firestore';
 
@@ -13,8 +14,8 @@ const FeedbackForm = ({}) => {
   const [carParks, setCarParks] = useState([]);
   const [selectedCarPark, setSelectedCarPark] = useState('');
   
-  //Hardcode CustomerID as 1
-  const customerID = 1;
+  const customerID=1;
+  console.log(`CustomerID is ${customerID}`);
 
   useEffect(() => {
     const fetchCarParks = async () => {
@@ -25,23 +26,19 @@ const FeedbackForm = ({}) => {
         const parkingHistoryCollection = collection(db, 'ParkingHistory');
         const parkingHistorySnapshot = await getDocs(query(parkingHistoryCollection, where('CustomerID', '==', customerID)));
         const parkingHistoryData = parkingHistorySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        for (let i=0; i < parkingHistoryData.length; i++) {
-          let temp = parkingHistoryData[i].CarParkID;
+        for (let parkingHistElement of parkingHistoryData) {
+          let temp = parkingHistElement.CarParkID;
           parkingHistory.push(temp);
-          //console.log(`CarParkID: ${parkingHistory[i]}`);
         }
         const carParksCollection = collection(db, 'CarParks');
         const carParksSnapshot = await getDocs(query(carParksCollection, where('ppCode', 'in', parkingHistory)));
         const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        //console.log(`Length of carParksData ${carParksData.length}`)
 
-        for (let i=0; i < carParksData.length; i++) {
-          for(let j=0; j < parkingHistory.length; j++){
-            if(carParksData[i].ppCode == parkingHistory[j]){
-              let temp = {label:(carParksData[i].ppName), value:(parkingHistory[j])}
+        for (let carParkElement of carParksData) {
+          for(let parkingHistElement of parkingHistory){
+            if(carParkElement.ppCode == parkingHistElement){
+              let temp = {label:(carParkElement.ppName), value:(parkingHistory[j])}
               carParksList.push(temp);
-              //console.log(carParksData[i].ppCode, parkingHistory[j]);
-              //console.log(temp);
             }
           }
         }
@@ -96,7 +93,7 @@ const FeedbackForm = ({}) => {
     if (rating && comment.trim() !== '' && selectedCarPark) {
       try{
         const feedbackCollection = collection(db, 'Feedback');
-        newFeedbackObject = {
+        let newFeedbackObject = {
           CarParkID: selectedCarPark,
           CustomerID: customerID,
           comment: comment,
@@ -117,60 +114,62 @@ const FeedbackForm = ({}) => {
 
 
   return (
-    <ImageBackground
-      source={require("../assets/LoginBG.png")}
-      resizeMode={"stretch"}
-      style={styles.backgroundImage}
-      imageStyle={styles.imageBG}
-    >
-      <View style={styles.container}>
-        <View style={styles.content}></View>
-          <Text style={styles.header}>What's Up</Text>
+    <View style={styles.container}>
 
-        {carParks.length > 0 ? (
-          <DropDownPicker
-            style={styles.dropDown}
-            open={dropDownOpen}
-            setOpen={setDropDownOpen}
-            value={selectedCarPark}
-            setValue={setSelectedCarPark}
-            items={carParks}
-            setItems={setCarParks}
-            containerStyle={{ height: 40, width: '50%' }}
-            
-            itemStyle={{
-              justifyContent: 'flex-start',
-            }}
-            dropDownStyle={{ backgroundColor: '#fafafa' }}
-            onChangeItem={(item) => setSelectedCarPark(item.value)}
-          />
-        ) : (
-          <Text>Loading car parks...</Text>
-        )}
+      <ImageBackground
+        source={require("../assets/LoginBG.png")}
+        resizeMode={"stretch"}
+        style={styles.backgroundImage}
+        imageStyle={styles.imageBG}
+      ></ImageBackground>
 
-          <StarRating
-            style={styles.rating} 
-            rating={rating} 
-            onChange={setRating} 
-          />
+      <View style={styles.content}></View>
 
-          <TextInput
-            style={styles.reviewInput}
-            multiline
-            onChangeText={setComment}
-            value={comment}
-            placeholder="Tell us about it"
-          />
+      <Text style={styles.header}>What's Up</Text>
 
-          <Pressable 
-            style={styles.button}
-            onPress={handleSubmit}
-          >
-            <Text style={styles.buttonText}>Submit</Text>         
-          </Pressable>
+      {carParks.length > 0 ? (
+        <DropDownPicker
+          style={styles.dropDown}
+          open={dropDownOpen}
+          setOpen={setDropDownOpen}
+          value={selectedCarPark}
+          setValue={setSelectedCarPark}
+          items={carParks}
+          setItems={setCarParks}
+          containerStyle={{ height: 40, width: '50%' }}
+          
+          itemStyle={{
+            justifyContent: 'flex-start',
+          }}
+          dropDownStyle={{ backgroundColor: '#fafafa' }}
+          onChangeItem={(item) => setSelectedCarPark(item.value)}
+        />
+      ) : (
+        <Text>No parking history found.</Text>
+      )}
 
-      </View>
-    </ImageBackground>
+      <StarRating
+      style={styles.rating} 
+      rating={rating} 
+      onChange={setRating} 
+      />
+
+      <TextInput
+        style={styles.reviewInput}
+        multiline
+        onChangeText={setComment}
+        value={comment}
+        placeholder="Tell us about it"
+      />
+
+      <Pressable 
+      style={styles.button}
+      onPress={handleSubmit}
+      >
+        <Text style={styles.buttonText}>Submit</Text>         
+      </Pressable>
+
+    </View>
   );
 };
 
@@ -199,24 +198,20 @@ const styles = StyleSheet.create({
     marginTop: "7%",
     marginLeft: "0%",
     marginRight: "0%",
-    marginBottom: "30%",
-    zIndex: 2,
+    marginBottom: "30%"
   },
 
   rating:{
-    marginTop: "10%",
-    zIndex: -1,
+    marginTop: "35%"
   },
 
   reviewInput: {
     height: "30%",
     width: "50%",
     margin: "7%",
-    textAlignVertical: 'top',
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    zIndex: -1,
   },
 
   button: {
@@ -236,13 +231,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: "#fff",
-  },
-  backgroundImage: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
   },
 });
 
