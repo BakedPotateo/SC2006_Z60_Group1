@@ -93,7 +93,7 @@ const FeedbackForm = ({}) => {
     if (rating && comment.trim() !== '' && selectedCarPark) {
       try{
         const feedbackCollection = collection(db, 'Feedback');
-        newFeedbackObject = {
+        let newFeedbackObject = {
           CarParkID: selectedCarPark,
           CustomerID: customerID,
           comment: comment,
