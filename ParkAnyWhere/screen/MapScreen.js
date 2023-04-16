@@ -461,7 +461,7 @@ const getAuthToken = async (accessKey) => {
     const data = await response.json();
 
     if (data.Status === 'Success') {
-      console.log('Authentication token:', data.Result);
+      // console.log('Authentication token:', data.Result);
       return data.Result;
     } else {
       console.error('Error getting authentication token:', data.Message);

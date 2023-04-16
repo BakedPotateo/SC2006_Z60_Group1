@@ -15,7 +15,7 @@ const FeedbackForm = ({}) => {
   const [selectedCarPark, setSelectedCarPark] = useState('');
   
   const customerID=1;
-  console.log(`CustomerID is ${customerID}`);
+  // console.log(`CustomerID is ${customerID}`);
 
   useEffect(() => {
     const fetchCarParks = async () => {
@@ -25,25 +25,25 @@ const FeedbackForm = ({}) => {
         const parkingHistoryCollection = collection(db, 'ParkingHistory');
         const parkingHistorySnapshot = await getDocs(query(parkingHistoryCollection, where('CustomerID', '==', customerID)));
         const parkingHistoryData = parkingHistorySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        console.log(`parkingHistoryData ${parkingHistoryData}`);
+        // console.log(`parkingHistoryData ${parkingHistoryData}`);
         for (let parkingHistElement of parkingHistoryData) {
-          console.log(`parkingHistDataElement ${parkingHistElement.CarParkID}`);
+          // console.log(`parkingHistDataElement ${parkingHistElement.CarParkID}`);
           let temp = parkingHistElement.CarParkID;
           parkingHistory.push(temp);
         }
         const carParksCollection = collection(db, 'CarParks');
         const carParksSnapshot = await getDocs(query(carParksCollection, where('ppCode', 'in', parkingHistory)));
         const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        console.log(`Length of carParksData ${carParksData.length}`);
-        console.log(`Length of parkingHistory ${parkingHistory.length}`);
+        // console.log(`Length of carParksData ${carParksData.length}`);
+        // console.log(`Length of parkingHistory ${parkingHistory.length}`);
         
         for (let carParkElement of carParksData) {
-          console.log(`----------CarparkData: ${carParkElement.ppCode}`);
+          // console.log(`----------CarparkData: ${carParkElement.ppCode}`);
           for(let parkingHistElement of parkingHistory){
-            console.log(`ParkingHistory: ${parkingHistElement}`)
+            // console.log(`ParkingHistory: ${parkingHistElement}`)
             if(carParkElement.ppCode == parkingHistElement){
               let temp = {label:(carParkElement.ppName), value:(parkingHistElement)}
-              console.log(temp);
+              // console.log(temp);
               carParksList.push(temp);
             }
           }
