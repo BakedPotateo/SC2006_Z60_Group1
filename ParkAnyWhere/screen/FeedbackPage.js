@@ -22,22 +22,28 @@ const FeedbackForm = ({}) => {
       try{
         const parkingHistory = []; //Stores IDs of carparks in ParkingHistory under CustomerID=customerID
         const carParksList = [];
-
         const parkingHistoryCollection = collection(db, 'ParkingHistory');
         const parkingHistorySnapshot = await getDocs(query(parkingHistoryCollection, where('CustomerID', '==', customerID)));
         const parkingHistoryData = parkingHistorySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+        console.log(`parkingHistoryData ${parkingHistoryData}`);
         for (let parkingHistElement of parkingHistoryData) {
+          console.log(`parkingHistDataElement ${parkingHistElement.CarParkID}`);
           let temp = parkingHistElement.CarParkID;
           parkingHistory.push(temp);
         }
         const carParksCollection = collection(db, 'CarParks');
         const carParksSnapshot = await getDocs(query(carParksCollection, where('ppCode', 'in', parkingHistory)));
         const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-
+        console.log(`Length of carParksData ${carParksData.length}`);
+        console.log(`Length of parkingHistory ${parkingHistory.length}`);
+        
         for (let carParkElement of carParksData) {
+          console.log(`----------CarparkData: ${carParkElement.ppCode}`);
           for(let parkingHistElement of parkingHistory){
+            console.log(`ParkingHistory: ${parkingHistElement}`)
             if(carParkElement.ppCode == parkingHistElement){
-              let temp = {label:(carParkElement.ppName), value:(parkingHistory[j])}
+              let temp = {label:(carParkElement.ppName), value:(parkingHistElement)}
+              console.log(temp);
               carParksList.push(temp);
             }
           }
