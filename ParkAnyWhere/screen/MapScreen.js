@@ -79,7 +79,7 @@ function MapScreen({ route , indoorOutdoor ,CheckboxChange }) {
       const carParksSnapshot = await getDocs(carParksCollection);
       const carParksData = carParksSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       //print out the data
-      console.log(carParksData);
+      // console.log(carParksData);
       setCarParks(carParksData);
       const accessKey = 'f21c183d-9c02-4e50-8939-b83dad170347';
       const authToken =  await getAuthToken(accessKey);
