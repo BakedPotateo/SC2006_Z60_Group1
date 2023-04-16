@@ -202,11 +202,13 @@ const styles = StyleSheet.create({
     marginTop: "7%",
     marginLeft: "0%",
     marginRight: "0%",
-    marginBottom: "30%"
+    marginBottom: "30%",
+    zIndex: 1
   },
 
   rating:{
     marginTop: "10%",
+    zIndex: -1
   },
 
   reviewInput: {
@@ -216,7 +218,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
+    zIndex: -1
   },
 
   button: {
