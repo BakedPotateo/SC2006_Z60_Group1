@@ -118,7 +118,7 @@ const ProfilePage = ({ navigation }) => {
 
     // Dynamically create the number of carpark cards and populate the content of the cards
     var dynamicCarparks = [];
-    for (let i=0; i < carpark.length; i++) {
+    for (let i=carpark.length-1; i >=0; i--) {
         dynamicCarparks.push(
             <Card key={i}>
                 <Card.Content>
